@@ -235,9 +235,10 @@ Deployment: Vercel
 
 - [x] Next.js projesi oluşturuldu
 - [x] TailwindCSS konfigürasyonu
-- [ ] Font import (Playfair Display + Inter)
-- [ ] Renk paletini Tailwind config'e ekleme
-- [ ] Framer Motion kurulumu
+- [x] Font import (Playfair Display + Inter)
+- [x] Renk paletini Tailwind config'e ekleme
+- [x] Framer Motion kurulumu
+- [x] Gerekli paketler kuruldu (lucide-react, clsx)
 
 ### Phase 2: Component Development (3-4 gün)
 
