@@ -242,13 +242,13 @@ Deployment: Vercel
 
 ### Phase 2: Component Development (3-4 gün)
 
-- [ ] Hero Section
-- [ ] About Section
-- [ ] Services Section
-- [ ] Experience Section
-- [ ] Gallery Section (video player dahil)
-- [ ] Location Section (Google Maps)
-- [ ] Footer
+- [x] Hero Section
+- [x] About Section
+- [x] Services Section
+- [x] Experience Section
+- [x] Gallery Section (video player dahil)
+- [x] Location Section (Google Maps)
+- [x] Footer
 
 ### Phase 3: Animasyon & UX (1-2 gün)
 
