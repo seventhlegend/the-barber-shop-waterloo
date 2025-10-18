@@ -1,36 +1,124 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🧔‍♂️ The Barber Shop – Waterloo
 
-## Getting Started
+**Sharp. Light. Elegant.**
 
-First, run the development server:
+Premium grooming experience in the heart of London.
+
+![Next.js](https://img.shields.io/badge/Next.js-15-black?style=flat-square&logo=next.js)
+![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4-38bdf8?style=flat-square&logo=tailwindcss)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6?style=flat-square&logo=typescript)
+
+## 🎨 Features
+
+- ✨ Modern, elegant single-page application
+- 🎭 Framer Motion animations
+- 📱 Fully responsive design (mobile-first)
+- ⚡ Next.js 15 with App Router
+- 🎨 Custom color palette (Black, Gold, Cream)
+- 🔤 Premium fonts (Playfair Display + Inter)
+- 🎯 SEO optimized
+- 🌐 Smooth scrolling navigation
+- 📍 Google Maps integration ready
+
+## 🚀 Tech Stack
+
+- **Framework:** Next.js 15
+- **Styling:** TailwindCSS
+- **Animation:** Framer Motion
+- **Icons:** Lucide React
+- **Fonts:** Google Fonts (Playfair Display, Inter)
+- **Language:** TypeScript
+
+## 📋 Getting Started
+
+### Prerequisites
+
+- Node.js 18+
+- pnpm (recommended) or npm
+
+### Installation
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+# Clone the repository
+git clone https://github.com/seventhlegend/the-barber-shop-waterloo.git
+
+# Navigate to project
+cd the-barber-shop
+
+# Install dependencies
+pnpm install
+
+# Run development server
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📁 Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+/src/app
+  ├── page.tsx              # Main page
+  ├── layout.tsx            # Root layout
+  ├── loading.tsx           # Loading state
+  ├── globals.css           # Global styles
+  └── components/
+      ├── Navbar.tsx        # Sticky navigation
+      ├── Hero.tsx          # Hero section
+      ├── About.tsx         # About section
+      ├── Services.tsx      # Services section
+      ├── Experience.tsx    # Experience section
+      ├── Gallery.tsx       # Gallery section
+      ├── Location.tsx      # Location section
+      ├── Footer.tsx        # Footer
+      └── ScrollToTop.tsx   # Scroll to top button
+```
 
-## Learn More
+## 🎨 Color Palette
 
-To learn more about Next.js, take a look at the following resources:
+| Color        | Hex Code  | Usage                         |
+| ------------ | --------- | ----------------------------- |
+| Barber Black | `#0E0E0E` | Background, navbar, footer    |
+| Barber Gold  | `#D4AF37` | Headers, icons, hover effects |
+| Barber Cream | `#F5F5F5` | Text, contrast areas          |
+| Barber Grey  | `#B8B8B8` | Subheadings, supporting text  |
+| Barber Brown | `#5A3E2B` | Background blocks, boxes      |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📦 Available Scripts
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+pnpm dev          # Start development server
+pnpm build        # Build for production
+pnpm start        # Start production server
+pnpm lint         # Run ESLint
+```
 
-## Deploy on Vercel
+## 🌐 Deployment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+This project is optimized for deployment on [Vercel](https://vercel.com):
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/seventhlegend/the-barber-shop-waterloo)
+
+## 📸 Content Requirements
+
+To complete the website, add the following content:
+
+- [ ] 5-6 high-quality interior photos
+- [ ] 1 promotional video (10-15 seconds, muted)
+- [ ] Logo (SVG format)
+- [ ] London Eye/Waterloo exterior shot (for hero background)
+
+## 🔗 Contact
+
+- **Email:** cut@waterloobarber.shop
+- **Instagram:** @thebarbershop.waterloo
+- **TikTok:** @thebarbershop.waterloo
+- **Address:** 123 York Road, Waterloo, London SE1
+
+## 📄 License
+
+© 2025 The Barber Shop – Designed in London.
+
+---
+
+**Made with ✂️ and ❤️ in London**

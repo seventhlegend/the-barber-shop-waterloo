@@ -18,6 +18,31 @@ export const metadata: Metadata = {
   title: "The Barber Shop – Premium Grooming in Waterloo, London",
   description:
     "Experience refined men's grooming near London Eye. Classic cuts, hot towel shaves, and complimentary drinks in an elegant atmosphere.",
+  keywords: [
+    "barber shop",
+    "London barber",
+    "Waterloo barber",
+    "men's grooming",
+    "haircut London",
+    "hot towel shave",
+    "premium barber",
+    "London Eye barber",
+  ],
+  authors: [{ name: "The Barber Shop Waterloo" }],
+  openGraph: {
+    title: "The Barber Shop – Premium Grooming in Waterloo, London",
+    description:
+      "Experience refined men's grooming near London Eye. Classic cuts, hot towel shaves, and complimentary drinks.",
+    type: "website",
+    locale: "en_GB",
+    siteName: "The Barber Shop Waterloo",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "The Barber Shop – Premium Grooming in Waterloo",
+    description:
+      "Experience refined men's grooming near London Eye. Classic cuts, hot towel shaves, and complimentary drinks.",
+  },
 };
 
 export default function RootLayout({

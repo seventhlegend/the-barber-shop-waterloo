@@ -252,17 +252,21 @@ Deployment: Vercel
 
 ### Phase 3: Animasyon & UX (1-2 gün)
 
-- [ ] Scroll-based fade-in animasyonları
-- [ ] Hover efektleri (altın geçişler)
-- [ ] Smooth scroll navigation
-- [ ] Loading states
+- [x] Scroll-based fade-in animasyonları
+- [x] Hover efektleri (altın geçişler)
+- [x] Smooth scroll navigation
+- [x] Loading states
+- [x] Sticky Navbar (desktop + mobile)
+- [x] Scroll to top button
+- [x] Custom scrollbar
 
 ### Phase 4: Responsive & Polish (1 gün)
 
-- [ ] Mobile-first responsive tasarım
-- [ ] Cross-browser testing
-- [ ] Performance optimization
-- [ ] SEO meta tags
+- [x] Mobile-first responsive tasarım
+- [x] Cross-browser testing
+- [x] Performance optimization
+- [x] SEO meta tags (+ OpenGraph + Twitter Cards)
+- [x] README.md güncellendi
 
 ### Phase 5: Content & Deploy (1 gün)
 
