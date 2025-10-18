@@ -10,7 +10,7 @@ import ScrollToTop from "./components/ScrollToTop";
 
 export default function Home() {
   return (
-    <main className="bg-barber-black">
+    <main className="bg-barber-black overflow-x-hidden">
       <Navbar />
       <Hero />
       <About />
