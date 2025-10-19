@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <!-- Scissors Icon with Gold Color -->
+  <g transform="translate(100, 100) scale(4)">
+    <!-- Top handle circle -->
+    <circle cx="-6" cy="-6" r="3" stroke="#D4AF37" stroke-width="1.5" fill="none"/>
+    <!-- Bottom handle circle -->
+    <circle cx="-6" cy="6" r="3" stroke="#D4AF37" stroke-width="1.5" fill="none"/>
+    <!-- Scissors blades -->
+    <path d="M -3.88 -3.88 L 0 0" stroke="#D4AF37" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M 8 -8 L -3.88 3.88" stroke="#D4AF37" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M 2.8 2.8 L 8 8" stroke="#D4AF37" stroke-width="1.5" stroke-linecap="round"/>
+  </g>
+</svg>
