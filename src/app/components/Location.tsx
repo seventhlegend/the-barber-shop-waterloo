@@ -9,7 +9,7 @@ export default function Location() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
-  const address = "123 York Road, Waterloo, London SE1";
+  const address = "4 Milner Pl, London SE1 7PE";
   const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
     address
   )}`;
@@ -38,40 +38,31 @@ export default function Location() {
         </motion.div>
 
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-          {/* Left: Map Placeholder */}
+          {/* Left: Map Embed */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="relative"
           >
-            {/* Map Container - TODO: Add Google Maps Embed */}
-            <div className="relative aspect-[4/3] bg-gradient-to-br from-barber-brown to-barber-black border-2 border-barber-gold/30 rounded-sm overflow-hidden group">
-              {/* Placeholder */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-center space-y-4">
-                  <MapPin
-                    className="w-16 h-16 text-barber-gold mx-auto"
-                    strokeWidth={1.5}
-                  />
-                  <div>
-                    <p className="font-playfair text-barber-gold text-xl mb-2">
-                      Interactive Map
-                    </p>
-                    <p className="font-inter text-barber-grey text-sm">
-                      Google Maps embed will be added here
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Hover Overlay */}
-              <div className="absolute inset-0 bg-barber-gold/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div className="relative w-full aspect-[4/3] bg-gradient-to-br from-barber-brown to-barber-black border-2 border-barber-gold/30 rounded-sm overflow-hidden group">
+              {/* OpenStreetMap Embed */}
+              <iframe
+                src="https://www.openstreetmap.org/export/embed.html?bbox=-0.11838734149932863%2C51.502386632355716%2C-0.11549055576324464%2C51.50387090652489&amp;layer=mapnik&amp;marker=51.50312794068353%2C-0.11693894863128662"
+                title="Barber Shop Location Map"
+                width="100%"
+                height="100%"
+                style={{ border: "none", minHeight: "250px", width: "100%" }}
+                className="absolute inset-0 w-full h-full"
+                allowFullScreen
+                loading="lazy"
+              ></iframe>
+              {/* Overlay for hover effect */}
+              <div className="absolute inset-0 bg-barber-gold/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
             </div>
-
             {/* Open in Maps Button */}
             <motion.a
-              href={googleMapsUrl}
+              href="https://maps.app.goo.gl/9ywRjxBrBzCKdguP6"
               target="_blank"
               rel="noopener noreferrer"
               initial={{ opacity: 0 }}
@@ -80,7 +71,7 @@ export default function Location() {
               className="mt-6 inline-flex items-center gap-2 px-6 py-3 bg-barber-gold text-barber-black font-inter font-semibold rounded-sm hover:bg-barber-cream transition-all duration-300 hover:shadow-lg"
             >
               <ExternalLink className="w-5 h-5" />
-              Open in Google Maps
+              View Larger Map
             </motion.a>
           </motion.div>
 
@@ -167,7 +158,7 @@ export default function Location() {
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-barber-gold mt-1">•</span>
-                  <span>Parking: Limited street parking available nearby</span>
+                  <span>Parking: You can park at Waterloo Carpark</span>
                 </li>
               </ul>
             </div>

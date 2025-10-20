@@ -92,7 +92,7 @@ export default function Footer() {
                   className="w-5 h-5 mt-0.5 flex-shrink-0"
                   strokeWidth={1.5}
                 />
-                <span>123 York Road, Waterloo, London SE1</span>
+                <span>4 Milner Pl, London SE1 7PE</span>
               </div>
             </div>
           </motion.div>
