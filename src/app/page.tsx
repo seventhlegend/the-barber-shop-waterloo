@@ -1,4 +1,5 @@
 import Navbar from "./components/Navbar";
+import WelcomePopup from "./components/WelcomePopup";
 import Hero from "./components/Hero";
 import About from "./components/About";
 import Services from "./components/Services";
@@ -11,6 +12,7 @@ import ScrollToTop from "./components/ScrollToTop";
 export default function Home() {
   return (
     <main className="bg-barber-black overflow-x-hidden">
+      <WelcomePopup />
       <Navbar />
       <Hero />
       <About />
