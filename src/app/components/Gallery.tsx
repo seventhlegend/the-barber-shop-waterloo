@@ -5,14 +5,18 @@ import { useInView } from "framer-motion";
 import { useRef } from "react";
 import { Play } from "lucide-react";
 
-// Placeholder gallery items - gerçek görseller eklenecek
+// Gallery items
 const galleryItems = [
-  { type: "video", placeholder: "Interior Video" },
-  { type: "image", placeholder: "Barber Chair" },
-  { type: "image", placeholder: "Whisky Service" },
-  { type: "image", placeholder: "Interior Details" },
-  { type: "image", placeholder: "Team Photo" },
-  { type: "image", placeholder: "Product Shelf" },
+  { type: "video", placeholder: "Interior Video", image: null },
+  { type: "image", placeholder: "Interior", image: "/gallery-interior.webp" },
+  { type: "image", placeholder: "Barber Chair", image: "/gallery-chair.webp" },
+  { type: "image", placeholder: "Details", image: "/gallery-details.webp" },
+  { type: "image", placeholder: "Products", image: "/gallery-products.webp" },
+  {
+    type: "image",
+    placeholder: "Atmosphere",
+    image: "/gallery-atmosphere.webp",
+  },
 ];
 
 export default function Gallery() {
@@ -54,12 +58,21 @@ export default function Gallery() {
                 index === 0 ? "md:col-span-2 md:row-span-2" : ""
               }`}
             >
-              {/* Placeholder Container */}
+              {/* Image/Video Container */}
               <div
-                className={`relative bg-gradient-to-br from-barber-brown to-barber-black border border-barber-gold/30 ${
+                className={`relative bg-gradient-to-br from-barber-brown to-barber-black border border-barber-gold/30 overflow-hidden ${
                   index === 0 ? "aspect-video" : "aspect-square"
                 }`}
               >
+                {/* Image */}
+                {item.image && (
+                  <img
+                    src={item.image}
+                    alt={item.placeholder}
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                )}
+
                 {/* Overlay on Hover */}
                 <div className="absolute inset-0 bg-barber-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 flex items-center justify-center">
                   {item.type === "video" ? (
@@ -83,22 +96,20 @@ export default function Gallery() {
                   )}
                 </div>
 
-                {/* Placeholder Content */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center space-y-3">
-                    {item.type === "video" && (
+                {/* Placeholder Content for Video */}
+                {item.type === "video" && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-barber-brown to-barber-black">
+                    <div className="text-center space-y-3">
                       <Play className="w-12 h-12 text-barber-gold/50 mx-auto" />
-                    )}
-                    <p className="font-playfair text-barber-gold/70 text-lg">
-                      {item.placeholder}
-                    </p>
-                    <p className="font-inter text-barber-grey/50 text-xs uppercase tracking-wider">
-                      {item.type === "video"
-                        ? "Video Coming Soon"
-                        : "Image Coming Soon"}
-                    </p>
+                      <p className="font-playfair text-barber-gold/70 text-lg">
+                        {item.placeholder}
+                      </p>
+                      <p className="font-inter text-barber-grey/50 text-xs uppercase tracking-wider">
+                        Video Coming Soon
+                      </p>
+                    </div>
                   </div>
-                </div>
+                )}
 
                 {/* Decorative Border Effect */}
                 <div className="absolute inset-0 border-2 border-barber-gold/0 group-hover:border-barber-gold/50 transition-all duration-300 pointer-events-none"></div>
@@ -110,7 +121,7 @@ export default function Gallery() {
           ))}
         </div>
 
-        {/* Note for Content */}
+        {/* Note for Video Content */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : {}}
@@ -118,7 +129,7 @@ export default function Gallery() {
           className="mt-12 text-center"
         >
           <p className="font-inter text-barber-grey/70 text-sm italic">
-            📸 Professional photos and video content will be added soon
+            🎥 Interior video coming soon
           </p>
         </motion.div>
       </div>

@@ -11,11 +11,14 @@ export default function Hero() {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-barber-black">
-      {/* Background: London Eye Silhouette (placeholder - gerçek görsel eklenecek) */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute inset-0 bg-gradient-to-b from-barber-gold/20 via-transparent to-barber-black"></div>
-        {/* TODO: London Eye siluet görseli eklenecek */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 border-4 border-barber-gold/20 rounded-full"></div>
+      {/* Background Image */}
+      <div className="absolute inset-0 opacity-30">
+        <img
+          src="/hero.webp"
+          alt="The Barber Shop Background"
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-barber-black/60 via-barber-black/40 to-barber-black"></div>
       </div>
 
       {/* Content */}
