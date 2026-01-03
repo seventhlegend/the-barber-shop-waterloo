@@ -49,15 +49,15 @@ const services = [
   },
   {
     icon: Scissors,
-    name: "The Complete Cut",
-    price: "£48",
+    name: "Haircut & Beard Cut",
+    price: "£55",
     description:
       "Haircut combined with a wet shave or detailed beard reshape. The perfect balance.",
   },
   {
     icon: Scissors,
     name: "Beard Trim – 'Gimgim Style'",
-    price: "£28",
+    price: "£33",
     description:
       "Signature sharp beard trim with hot towel finish — meticulous and modern.",
   },
@@ -216,7 +216,9 @@ export default function Services() {
           className="text-center mt-8 md:mt-12"
         >
           <a
-            href="mailto:cut@waterloobarber.shop"
+            href="https://book.squareup.com/appointments/4xq8s10esmdcgp/location/LM3CKN1Y1RJ0P/services"
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-block px-8 md:px-10 py-3 md:py-4 bg-barber-gold text-barber-black font-inter font-semibold text-base md:text-lg rounded-sm hover:bg-barber-cream transition-all duration-300 hover:shadow-lg hover:shadow-barber-gold/50"
           >
             Book Your Appointment

@@ -8,6 +8,7 @@ import Gallery from "./components/Gallery";
 import Location from "./components/Location";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
+import MembershipWithPhoto from "./components/MembershipWithPhoto";
 
 export default function Home() {
   return (
@@ -15,10 +16,11 @@ export default function Home() {
       <WelcomePopup />
       <Navbar />
       <Hero />
-      <About />
       <Services />
+      <MembershipWithPhoto />
       <Experience />
       <Gallery />
+      <About />
       <Location />
       <Footer />
       <ScrollToTop />

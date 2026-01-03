@@ -27,7 +27,7 @@ export default function WelcomePopup() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.4 }}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-barber-black/95 backdrop-blur-lg px-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-barber-black/95 backdrop-blur-lg px-4 py-8 md:py-12"
           onClick={() => setOpen(false)}
         >
           <motion.div
@@ -39,7 +39,7 @@ export default function WelcomePopup() {
               ease: [0.22, 1, 0.36, 1],
             }}
             onClick={(e) => e.stopPropagation()}
-            className="relative bg-gradient-to-br from-barber-brown/30 via-barber-black to-barber-black border border-barber-gold shadow-2xl shadow-barber-gold/30 max-w-xl w-full overflow-hidden"
+            className="relative bg-gradient-to-br from-barber-brown/30 via-barber-black to-barber-black border border-barber-gold shadow-2xl shadow-barber-gold/30 max-w-md w-full max-h-[85vh] overflow-hidden"
           >
             {/* Subtle Background Pattern */}
             <div className="absolute inset-0 opacity-5">
@@ -98,38 +98,18 @@ export default function WelcomePopup() {
             </motion.button>
 
             {/* Content */}
-            <div className="relative flex flex-col items-center text-center px-8 md:px-12 py-14 md:py-16 space-y-7">
-              {/* Animated Icon */}
-              <motion.div
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2, duration: 0.5 }}
-              >
-                <Scissors
-                  className="w-14 h-14 md:w-16 md:h-16 text-barber-gold drop-shadow-lg"
-                  strokeWidth={1.5}
-                />
-              </motion.div>
-
-              {/* Top Divider */}
-              <motion.div
-                initial={{ width: 0 }}
-                animate={{ width: "4rem" }}
-                transition={{ delay: 0.3, duration: 0.6 }}
-                className="h-px bg-gradient-to-r from-transparent via-barber-gold to-transparent"
-              ></motion.div>
-
+            <div className="relative flex flex-col items-center text-center px-5 md:px-6 py-5 md:py-6 space-y-2.5">
               {/* Main Title */}
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4, duration: 0.5 }}
-                className="space-y-2"
+                className="space-y-1"
               >
-                <p className="text-sm md:text-base font-inter text-barber-grey uppercase tracking-[0.3em] font-light">
+                <p className="text-xs md:text-sm font-inter text-barber-grey uppercase tracking-[0.3em] font-light">
                   Welcome to
                 </p>
-                <h2 className="text-4xl md:text-5xl lg:text-6xl font-playfair text-barber-gold tracking-wide leading-tight">
+                <h2 className="text-3xl md:text-4xl font-playfair text-barber-gold tracking-wide leading-tight">
                   The Barber Shop
                 </h2>
               </motion.div>
@@ -137,24 +117,23 @@ export default function WelcomePopup() {
               {/* Middle Divider */}
               <motion.div
                 initial={{ width: 0 }}
-                animate={{ width: "6rem" }}
+                animate={{ width: "4rem" }}
                 transition={{ delay: 0.5, duration: 0.6 }}
                 className="h-px bg-gradient-to-r from-transparent via-barber-gold/50 to-transparent"
               ></motion.div>
 
-              {/* Subtitle Section */}
+              {/* Location Image */}
               <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.6, duration: 0.5 }}
-                className="space-y-2"
+                className="w-full max-w-md overflow-hidden border-2 border-barber-gold/30"
               >
-                <p className="text-lg md:text-xl font-inter text-barber-cream font-light tracking-wide">
-                  Soft Opening
-                </p>
-                <p className="text-sm md:text-base font-inter text-barber-grey/80 italic font-light">
-                  Official Launch Coming Soon
-                </p>
+                <img
+                  src="/location-preview.webp"
+                  alt="The Barber Shop Location"
+                  className="w-full h-48 md:h-36 object-cover"
+                />
               </motion.div>
 
               {/* Premium Offer Box */}
@@ -162,22 +141,22 @@ export default function WelcomePopup() {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.7, duration: 0.5 }}
-                className="relative mt-6 px-10 py-8 bg-gradient-to-br from-barber-gold/15 to-barber-gold/5 border-2 border-barber-gold/50 w-full backdrop-blur-sm"
+                className="relative px-5 py-2.5 bg-gradient-to-br from-barber-gold/15 to-barber-gold/5 border-2 border-barber-gold/50 w-full backdrop-blur-sm"
               >
                 {/* Sparkle Icons */}
-                <Sparkles className="absolute top-3 left-3 w-4 h-4 text-barber-gold/60" />
-                <Sparkles className="absolute bottom-3 right-3 w-4 h-4 text-barber-gold/60" />
+                <Sparkles className="absolute top-2 left-2 w-3 h-3 text-barber-gold/60" />
+                <Sparkles className="absolute bottom-2 right-2 w-3 h-3 text-barber-gold/60" />
 
                 <motion.p
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.9, duration: 0.4 }}
-                  className="text-3xl md:text-4xl font-playfair text-barber-gold font-bold mb-3 tracking-wide"
+                  className="text-lg md:text-xl font-playfair text-barber-gold font-bold mb-1 tracking-wide"
                 >
                   25% OFF
                 </motion.p>
-                <p className="text-sm md:text-base font-inter text-barber-cream leading-relaxed font-light">
-                  All services during our opening weeks
+                <p className="text-xs font-inter text-barber-cream leading-relaxed font-light">
+                  Haircuts during our opening weeks
                 </p>
               </motion.div>
 
@@ -192,7 +171,7 @@ export default function WelcomePopup() {
                 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setOpen(false)}
-                className="relative mt-6 px-12 py-4 bg-barber-gold text-barber-black font-inter font-bold text-sm md:text-base tracking-[0.2em] uppercase transition-all duration-300 overflow-hidden group"
+                className="relative px-8 py-2.5 bg-barber-gold text-barber-black font-inter font-bold text-xs tracking-[0.2em] uppercase transition-all duration-300 overflow-hidden group"
               >
                 <span className="relative z-10">Enter</span>
                 <div className="absolute inset-0 bg-barber-cream scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300"></div>
@@ -203,7 +182,7 @@ export default function WelcomePopup() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1, duration: 0.5 }}
-                className="text-xs font-inter text-barber-grey/60 uppercase tracking-widest pt-4"
+                className="text-xs font-inter text-barber-grey/60 uppercase tracking-widest pt-0.5"
               >
                 Waterloo · London
               </motion.p>

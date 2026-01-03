@@ -76,7 +76,9 @@ export default function Footer() {
             </h4>
             <div className="space-y-3 font-inter text-sm">
               <a
-                href="mailto:cut@waterloobarber.shop"
+                href="https://book.squareup.com/appointments/4xq8s10esmdcgp/location/LM3CKN1Y1RJ0P/services"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="flex items-start gap-3 text-barber-grey hover:text-barber-gold transition-colors group"
               >
                 <Mail
@@ -149,7 +151,9 @@ export default function Footer() {
           className="mt-16 pt-12 border-t border-barber-gold/20 text-center"
         >
           <a
-            href="mailto:cut@waterloobarber.shop"
+            href="https://book.squareup.com/appointments/4xq8s10esmdcgp/location/LM3CKN1Y1RJ0P/services"
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-block px-10 py-4 bg-barber-gold text-barber-black font-inter font-semibold text-lg rounded-sm hover:bg-barber-cream transition-all duration-300 hover:shadow-lg hover:shadow-barber-gold/30"
           >
             Book Your Appointment Today

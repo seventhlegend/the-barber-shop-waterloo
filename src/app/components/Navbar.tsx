@@ -5,10 +5,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Scissors, Menu, X } from "lucide-react";
 
 const navLinks = [
-  { name: "About", href: "#about" },
   { name: "Services", href: "#services" },
+  { name: "Membership", href: "#membership" },
   { name: "Experience", href: "#experience" },
   { name: "Gallery", href: "#gallery" },
+  { name: "About", href: "#about" },
   { name: "Location", href: "#location" },
 ];
 
@@ -72,7 +73,9 @@ export default function Navbar() {
                 </button>
               ))}
               <a
-                href="mailto:cut@waterloobarber.shop"
+                href="https://book.squareup.com/appointments/4xq8s10esmdcgp/location/LM3CKN1Y1RJ0P/services"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="px-6 py-2 bg-barber-gold text-barber-black font-inter font-semibold rounded-sm hover:bg-barber-cream transition-all duration-300"
               >
                 Book Now
@@ -123,7 +126,9 @@ export default function Navbar() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5 }}
-                  href="mailto:cut@waterloobarber.shop"
+                  href="https://book.squareup.com/appointments/4xq8s10esmdcgp/location/LM3CKN1Y1RJ0P/services"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="mt-6 px-8 py-4 bg-barber-gold text-barber-black font-inter font-semibold text-center rounded-sm hover:bg-barber-cream transition-all duration-300"
                 >
                   Book Your Appointment

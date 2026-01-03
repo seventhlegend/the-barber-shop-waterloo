@@ -10,15 +10,15 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-barber-black">
+    <section className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-barber-black">
       {/* Background Image */}
-      <div className="absolute inset-0 opacity-30">
+      <div className="absolute inset-0 w-full h-full opacity-65">
         <img
           src="/hero.webp"
           alt="The Barber Shop Background"
-          className="w-full h-full object-cover"
+          className="w-full h-full min-h-screen object-cover object-center md:object-center"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-barber-black/60 via-barber-black/40 to-barber-black"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-barber-black/30 via-barber-black/20 to-barber-black/70"></div>
       </div>
 
       {/* Content */}
@@ -84,7 +84,9 @@ export default function Hero() {
           >
             {/* Primary CTA */}
             <a
-              href="mailto:cut@waterloobarber.shop"
+              href="https://book.squareup.com/appointments/4xq8s10esmdcgp/location/LM3CKN1Y1RJ0P/services"
+              target="_blank"
+              rel="noopener noreferrer"
               className="group relative px-8 py-4 bg-barber-gold text-barber-black font-inter font-semibold text-lg rounded-sm overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-barber-gold/50"
             >
               <span className="relative z-10 flex items-center gap-2">
@@ -104,22 +106,6 @@ export default function Hero() {
           </motion.div>
         </motion.div>
       </div>
-
-      {/* Scroll Indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 1.2 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
-      >
-        <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          className="w-6 h-10 border-2 border-barber-gold rounded-full flex justify-center pt-2"
-        >
-          <div className="w-1 h-2 bg-barber-gold rounded-full"></div>
-        </motion.div>
-      </motion.div>
     </section>
   );
 }
