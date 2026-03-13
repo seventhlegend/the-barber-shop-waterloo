@@ -123,4 +123,4 @@ To complete the website, add the following content:
 
 **Made with ✂️ and ❤️ in London**
 
-cd /Users/can/Desktop/TEMP-PROJECTS/WV-GREY-ELECTRIC/the-barber-shop/out && zip -r ../barber-shop-build.zip .
+pnpm build && cd /Users/can/Desktop/TEMP-PROJECTS/WV-GREY-ELECTRIC/the-barber-shop/out && zip -r ../barber-shop-build.zip . -x '\*.DS_Store'
