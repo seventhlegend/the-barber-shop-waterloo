@@ -153,7 +153,7 @@ export default function WelcomePopup() {
                   transition={{ delay: 0.9, duration: 0.4 }}
                   className="text-lg md:text-xl font-playfair text-barber-gold font-bold mb-1 tracking-wide"
                 >
-                  25% OFF
+                  10% OFF
                 </motion.p>
                 <p className="text-xs font-inter text-barber-cream leading-relaxed font-light">
                   Haircuts during our opening weeks

@@ -7,6 +7,13 @@ import { Scissors, Wind, Sparkles, Coffee } from "lucide-react";
 
 const services = [
   {
+    icon: Sparkles,
+    name: "Cut-Throat Razor Shave / Beard Reshape",
+    price: "£28",
+    description:
+      "Traditional wet shave or beard redesign using hot towel & steamer — the classic ritual, redefined.",
+  },
+  {
     icon: Scissors,
     name: "Buzz Cut",
     price: "£36",
@@ -39,13 +46,6 @@ const services = [
     name: "Hair Clipper Cut",
     price: "£28",
     description: "Single-grade clipper cut. Minimalist, sharp, and effortless.",
-  },
-  {
-    icon: Sparkles,
-    name: "Cut-Throat Razor Shave / Beard Reshape",
-    price: "£28",
-    description:
-      "Traditional wet shave or beard redesign using hot towel & steamer — the classic ritual, redefined.",
   },
   {
     icon: Scissors,
@@ -84,7 +84,7 @@ const services = [
   {
     icon: Sparkles,
     name: "Total Relaxing",
-    price: "£70",
+    price: "£85",
     description:
       "Full package: haircut, styling, shave, waxing & facial mask. The complete rejuvenation experience.",
   },
