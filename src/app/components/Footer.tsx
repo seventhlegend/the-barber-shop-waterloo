@@ -112,7 +112,7 @@ export default function Footer() {
             </h4>
             <div className="flex gap-4">
               <a
-                href="https://instagram.com/thebarbershop.waterloo"
+                href="https://instagram.com/thebarbershop.london"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group w-12 h-12 border-2 border-barber-gold/30 rounded-sm flex items-center justify-center hover:border-barber-gold hover:bg-barber-gold/10 transition-all duration-300"
@@ -124,7 +124,7 @@ export default function Footer() {
                 />
               </a>
               <a
-                href="https://tiktok.com/@thebarbershop.waterloo"
+                href="https://tiktok.com/@thebarbershop.london"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group w-12 h-12 border-2 border-barber-gold/30 rounded-sm flex items-center justify-center hover:border-barber-gold hover:bg-barber-gold/10 transition-all duration-300"
@@ -137,7 +137,7 @@ export default function Footer() {
               </a>
             </div>
             <p className="font-inter text-barber-grey text-sm">
-              @thebarbershop.waterloo
+              @thebarbershop.london
             </p>
           </motion.div>
         </div>

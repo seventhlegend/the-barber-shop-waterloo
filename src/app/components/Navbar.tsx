@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Scissors, Menu, X } from "lucide-react";
+import { Scissors, Menu, X, Instagram, Music2 } from "lucide-react";
 
 const navLinks = [
   { name: "Services", href: "#services" },
@@ -11,6 +11,19 @@ const navLinks = [
   { name: "Gallery", href: "#gallery" },
   { name: "About", href: "#about" },
   { name: "Location", href: "#location" },
+];
+
+const socialLinks = [
+  {
+    name: "Instagram",
+    href: "https://instagram.com/thebarbershop.london",
+    icon: Instagram,
+  },
+  {
+    name: "TikTok",
+    href: "https://tiktok.com/@thebarbershop.london",
+    icon: Music2,
+  },
 ];
 
 export default function Navbar() {
@@ -72,6 +85,27 @@ export default function Navbar() {
                   <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-barber-gold group-hover:w-full transition-all duration-300"></span>
                 </button>
               ))}
+              <div className="flex items-center gap-3">
+                {socialLinks.map((link) => {
+                  const Icon = link.icon;
+
+                  return (
+                    <a
+                      key={link.name}
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group w-10 h-10 border border-barber-gold/30 rounded-sm flex items-center justify-center text-barber-gold hover:border-barber-gold hover:bg-barber-gold/10 transition-all duration-300"
+                      aria-label={link.name}
+                    >
+                      <Icon
+                        className="w-5 h-5 group-hover:scale-110 transition-transform"
+                        strokeWidth={1.5}
+                      />
+                    </a>
+                  );
+                })}
+              </div>
               <a
                 href="https://book.squareup.com/appointments/4xq8s10esmdcgp/location/LM3CKN1Y1RJ0P/services"
                 target="_blank"
@@ -133,6 +167,27 @@ export default function Navbar() {
                 >
                   Book Your Appointment
                 </motion.a>
+                <div className="flex items-center gap-4 pt-2">
+                  {socialLinks.map((link) => {
+                    const Icon = link.icon;
+
+                    return (
+                      <a
+                        key={link.name}
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group w-12 h-12 border-2 border-barber-gold/30 rounded-sm flex items-center justify-center hover:border-barber-gold hover:bg-barber-gold/10 transition-all duration-300"
+                        aria-label={link.name}
+                      >
+                        <Icon
+                          className="w-6 h-6 text-barber-gold group-hover:scale-110 transition-transform"
+                          strokeWidth={1.5}
+                        />
+                      </a>
+                    );
+                  })}
+                </div>
               </div>
             </div>
           </motion.div>

@@ -125,7 +125,7 @@ Sat–Sun: 10:00 – 17:00
 
 ✉️ cut@waterloobarber.shop
 📍 London Waterloo
-📱 @thebarbershop.waterloo
+📱 @thebarbershop.london
 
 THE BARBER SHOP
 Sharp. Light. Refined.

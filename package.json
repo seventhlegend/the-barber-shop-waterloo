@@ -5,7 +5,15 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "dev:webpack": "next dev --webpack",
+    "build:static": "next build && if [ -f public/_headers ]; then cp public/_headers out/; fi && if [ -f public/_redirects ]; then cp public/_redirects out/; fi && if [ -f vercel.json ]; then cp vercel.json out/; fi && mkdir -p out/_functions && if [ -f \"public/_functions/[[path]].js\" ]; then cp \"public/_functions/[[path]].js\" out/_functions/; fi",
+    "release:zip": "pnpm run build:static && ZIP_NAME=\"the-barber-shop-static-build-$(date +%Y%m%d-%H%M).zip\" && rm -f \"$ZIP_NAME\" && (cd out && zip -r \"../$ZIP_NAME\" .) && echo \"Created $ZIP_NAME\"",
+    "serve": "pnpm dlx serve out",
+    "deploy:github": "pnpm run build:static && touch out/.nojekyll",
+    "deploy:netlify": "pnpm run build:static",
+    "deploy:vercel": "pnpm run build:static && echo 'Upload out/ directory to Vercel'",
+    "deploy:cloudflare": "pnpm run build:static && echo 'Upload out/ directory to Cloudflare Pages'"
   },
   "dependencies": {
     "clsx": "^2.1.1",

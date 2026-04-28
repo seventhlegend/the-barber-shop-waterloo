@@ -111,8 +111,8 @@ To complete the website, add the following content:
 ## 🔗 Contact
 
 - **Email:** cut@waterloobarber.shop
-- **Instagram:** @thebarbershop.waterloo
-- **TikTok:** @thebarbershop.waterloo
+- **Instagram:** @thebarbershop.london
+- **TikTok:** @thebarbershop.london
 - **Address:** 123 York Road, Waterloo, London SE1
 
 ## 📄 License
