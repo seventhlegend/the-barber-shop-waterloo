@@ -1,168 +1,47 @@
-"use client";
+import { ArrowUpRight } from "lucide-react";
 
-import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
-import { useRef } from "react";
-import { MapPin, ExternalLink, Train, Eye } from "lucide-react";
+const mapUrl = "https://maps.app.goo.gl/9ywRjxBrBzCKdguP6";
 
 export default function Location() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
-  const address = "4 Milner Pl, London SE1 7PE";
-  const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-    address
-  )}`;
-
   return (
-    <section
-      id="location"
-      ref={ref}
-      className="relative py-24 md:py-32 bg-gradient-to-b from-barber-black to-barber-brown/30"
-    >
-      <div className="container mx-auto px-4">
-        {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-5xl md:text-6xl font-playfair text-barber-gold mb-6">
-            Find Us in Waterloo
-          </h2>
-          <div className="w-24 h-px bg-barber-gold mx-auto mb-8"></div>
-          <p className="text-lg md:text-xl font-inter text-barber-cream max-w-2xl mx-auto">
-            Just steps from the London Eye and Waterloo Station.
-          </p>
-        </motion.div>
+    <section id="location" className="bg-barber-black px-5 py-20 md:px-8 md:py-28">
+      <div className="mx-auto max-w-7xl">
+        <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
+          <div>
+            <h2 className="font-playfair text-5xl leading-tight text-barber-cream md:text-6xl">Find us in Waterloo</h2>
+            <p className="mt-6 max-w-md text-lg leading-relaxed text-barber-grey">
+              Near the London Eye and Waterloo Station. Come in, take a seat and make some time for yourself.
+            </p>
 
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-          {/* Left: Map Embed */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="relative"
-          >
-            <div className="relative w-full aspect-[4/3] bg-gradient-to-br from-barber-brown to-barber-black border-2 border-barber-gold/30 rounded-sm overflow-hidden group">
-              {/* OpenStreetMap Embed */}
-              <iframe
-                src="https://www.openstreetmap.org/export/embed.html?bbox=-0.11838734149932863%2C51.502386632355716%2C-0.11549055576324464%2C51.50387090652489&amp;layer=mapnik&amp;marker=51.50312794068353%2C-0.11693894863128662"
-                title="Barber Shop Location Map"
-                width="100%"
-                height="100%"
-                style={{ border: "none", minHeight: "250px", width: "100%" }}
-                className="absolute inset-0 w-full h-full"
-                allowFullScreen
-                loading="lazy"
-              ></iframe>
-              {/* Overlay for hover effect */}
-              <div className="absolute inset-0 bg-barber-gold/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
-            </div>
-            {/* Open in Maps Button */}
-            <motion.a
-              href="https://maps.app.goo.gl/9ywRjxBrBzCKdguP6"
-              target="_blank"
-              rel="noopener noreferrer"
-              initial={{ opacity: 0 }}
-              animate={isInView ? { opacity: 1 } : {}}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="mt-6 inline-flex items-center gap-2 px-6 py-3 bg-barber-gold text-barber-black font-inter font-semibold rounded-sm hover:bg-barber-cream transition-all duration-300 hover:shadow-lg"
-            >
-              <ExternalLink className="w-5 h-5" />
-              View Larger Map
-            </motion.a>
-          </motion.div>
-
-          {/* Right: Location Details */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="space-y-8"
-          >
-            {/* Address */}
-            <div className="space-y-4">
-              <div className="flex items-start gap-4">
-                <MapPin
-                  className="w-6 h-6 text-barber-gold mt-1 flex-shrink-0"
-                  strokeWidth={1.5}
-                />
-                <div>
-                  <h3 className="text-2xl font-playfair text-barber-cream mb-2">
-                    Address
-                  </h3>
-                  <p className="font-inter text-barber-grey leading-relaxed">
-                    {address}
-                  </p>
-                </div>
+            <div className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+              <div>
+                <h3 className="text-base font-semibold text-barber-gold">Address</h3>
+                <address className="mt-3 not-italic leading-relaxed text-barber-cream">
+                  4 Milner Pl<br />London SE1 7PE
+                </address>
+              </div>
+              <div>
+                <h3 className="text-base font-semibold text-barber-gold">Opening hours</h3>
+                <dl className="mt-3 space-y-2 text-barber-cream">
+                  <div><dt>Monday – Friday</dt><dd className="text-barber-grey">9:30 – 19:00</dd></div>
+                  <div><dt>Saturday – Sunday</dt><dd className="text-barber-grey">10:00 – 17:00</dd></div>
+                </dl>
               </div>
             </div>
 
-            {/* Landmarks */}
-            <div className="space-y-4">
-              <h3 className="text-2xl font-playfair text-barber-cream mb-4">
-                Nearby Landmarks
-              </h3>
+            <a href={mapUrl} target="_blank" rel="noopener noreferrer" className="mt-9 inline-flex min-h-12 items-center gap-2 bg-barber-gold px-6 font-semibold text-barber-black transition-colors hover:bg-barber-cream focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-barber-gold">
+              Get directions <ArrowUpRight size={18} aria-hidden="true" />
+            </a>
+          </div>
 
-              {/* London Eye */}
-              <div className="flex items-center gap-4 p-4 bg-barber-black/40 border border-barber-gold/20 rounded-sm">
-                <Eye
-                  className="w-8 h-8 text-barber-gold flex-shrink-0"
-                  strokeWidth={1.5}
-                />
-                <div>
-                  <p className="font-inter text-barber-cream font-semibold">
-                    London Eye
-                  </p>
-                  <p className="font-inter text-barber-grey text-sm">
-                    2 minutes walk
-                  </p>
-                </div>
-              </div>
-
-              {/* Waterloo Station */}
-              <div className="flex items-center gap-4 p-4 bg-barber-black/40 border border-barber-gold/20 rounded-sm">
-                <Train
-                  className="w-8 h-8 text-barber-gold flex-shrink-0"
-                  strokeWidth={1.5}
-                />
-                <div>
-                  <p className="font-inter text-barber-cream font-semibold">
-                    Waterloo Station
-                  </p>
-                  <p className="font-inter text-barber-grey text-sm">
-                    5 minutes walk
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Transport Info */}
-            <div className="p-6 bg-barber-gold/10 border border-barber-gold/30 rounded-sm">
-              <h4 className="font-playfair text-barber-gold text-lg mb-3">
-                Getting Here
-              </h4>
-              <ul className="space-y-2 font-inter text-barber-grey text-sm">
-                <li className="flex items-start gap-2">
-                  <span className="text-barber-gold mt-1">•</span>
-                  <span>
-                    Tube: Waterloo (Northern, Bakerloo, Jubilee, Waterloo & City
-                    lines)
-                  </span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-barber-gold mt-1">•</span>
-                  <span>Bus: Multiple routes stop at Waterloo Station</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-barber-gold mt-1">•</span>
-                  <span>Parking: You can park at Waterloo Carpark</span>
-                </li>
-              </ul>
-            </div>
-          </motion.div>
+          <div className="relative min-h-[340px] overflow-hidden bg-[#292621] lg:min-h-[530px]">
+            <iframe
+              src="https://www.openstreetmap.org/export/embed.html?bbox=-0.11838734149932863%2C51.502386632355716%2C-0.11549055576324464%2C51.50387090652489&amp;layer=mapnik&amp;marker=51.50312794068353%2C-0.11693894863128662"
+              title="Map showing The Barber Shop at 4 Milner Place, London"
+              className="absolute inset-0 h-full w-full border-0"
+              loading="lazy"
+            />
+          </div>
         </div>
       </div>
     </section>

@@ -1,173 +1,45 @@
-"use client";
+import { Instagram, Music2 } from "lucide-react";
 
-import { motion } from "framer-motion";
-import { Clock, Mail, MapPin, Instagram, Music2, Scissors } from "lucide-react";
+const bookingUrl = "https://book.squareup.com/appointments/4xq8s10esmdcgp/location/LM3CKN1Y1RJ0P/services";
 
 export default function Footer() {
-  const currentYear = new Date().getFullYear();
-
   return (
-    <footer className="relative bg-barber-black border-t border-barber-gold/20">
-      {/* Main Footer Content */}
-      <div className="container mx-auto px-4 py-16 md:py-20">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 max-w-7xl mx-auto">
-          {/* Brand Column */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
-            className="space-y-6"
-          >
-            <div className="space-y-3">
-              <Scissors
-                className="w-10 h-10 text-barber-gold"
-                strokeWidth={1.5}
-              />
-              <h3 className="text-2xl font-playfair text-barber-gold">
-                THE BARBER SHOP
-              </h3>
-              <p className="font-playfair text-barber-grey italic text-sm">
-                Sharp. Light. Refined.
-              </p>
-            </div>
-            <p className="font-inter text-barber-grey text-sm leading-relaxed">
-              Premium grooming experience in the heart of London, where
-              tradition meets modern elegance.
-            </p>
-          </motion.div>
-
-          {/* Opening Hours */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            viewport={{ once: true }}
-            className="space-y-4"
-          >
-            <div className="flex items-center gap-2 mb-4">
-              <Clock className="w-5 h-5 text-barber-gold" strokeWidth={1.5} />
-              <h4 className="font-playfair text-barber-cream text-lg">
-                Opening Hours
-              </h4>
-            </div>
-            <div className="space-y-2 font-inter text-sm">
-              <div className="flex justify-between">
-                <span className="text-barber-grey">Monday – Friday</span>
-                <span className="text-barber-cream">9:30 – 19:00</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-barber-grey">Saturday – Sunday</span>
-                <span className="text-barber-cream">10:00 – 17:00</span>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Contact */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            viewport={{ once: true }}
-            className="space-y-4"
-          >
-            <h4 className="font-playfair text-barber-cream text-lg mb-4">
-              Contact
-            </h4>
-            <div className="space-y-3 font-inter text-sm">
-              <a
-                href="https://book.squareup.com/appointments/4xq8s10esmdcgp/location/LM3CKN1Y1RJ0P/services"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-start gap-3 text-barber-grey hover:text-barber-gold transition-colors group"
-              >
-                <Mail
-                  className="w-5 h-5 mt-0.5 flex-shrink-0"
-                  strokeWidth={1.5}
-                />
-                <span className="group-hover:underline">
-                  cut@waterloobarber.shop
-                </span>
-              </a>
-              <div className="flex items-start gap-3 text-barber-grey">
-                <MapPin
-                  className="w-5 h-5 mt-0.5 flex-shrink-0"
-                  strokeWidth={1.5}
-                />
-                <span>4 Milner Pl, London SE1 7PE</span>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Social Media */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            viewport={{ once: true }}
-            className="space-y-4"
-          >
-            <h4 className="font-playfair text-barber-cream text-lg mb-4">
-              Follow Us
-            </h4>
-            <div className="flex gap-4">
-              <a
-                href="https://instagram.com/thebarbershop.london"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group w-12 h-12 border-2 border-barber-gold/30 rounded-sm flex items-center justify-center hover:border-barber-gold hover:bg-barber-gold/10 transition-all duration-300"
-                aria-label="Instagram"
-              >
-                <Instagram
-                  className="w-6 h-6 text-barber-gold group-hover:scale-110 transition-transform"
-                  strokeWidth={1.5}
-                />
-              </a>
-              <a
-                href="https://tiktok.com/@thebarbershop.london"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group w-12 h-12 border-2 border-barber-gold/30 rounded-sm flex items-center justify-center hover:border-barber-gold hover:bg-barber-gold/10 transition-all duration-300"
-                aria-label="TikTok"
-              >
-                <Music2
-                  className="w-6 h-6 text-barber-gold group-hover:scale-110 transition-transform"
-                  strokeWidth={1.5}
-                />
-              </a>
-            </div>
-            <p className="font-inter text-barber-grey text-sm">
-              @thebarbershop.london
-            </p>
-          </motion.div>
-        </div>
-
-        {/* CTA Section */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          viewport={{ once: true }}
-          className="mt-16 pt-12 border-t border-barber-gold/20 text-center"
-        >
-          <a
-            href="https://book.squareup.com/appointments/4xq8s10esmdcgp/location/LM3CKN1Y1RJ0P/services"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block px-10 py-4 bg-barber-gold text-barber-black font-inter font-semibold text-lg rounded-sm hover:bg-barber-cream transition-all duration-300 hover:shadow-lg hover:shadow-barber-gold/30"
-          >
-            Book Your Appointment Today
-          </a>
-        </motion.div>
-      </div>
-
-      {/* Bottom Bar */}
-      <div className="border-t border-barber-gold/20 bg-barber-black">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm font-inter text-barber-grey">
-            <p>© {currentYear} The Barber Shop – Designed in London.</p>
-            <p className="text-barber-gold/70">Sharp. Light. Elegant.</p>
+    <footer className="border-t border-barber-gold/20 bg-barber-black text-barber-cream">
+      <div className="mx-auto max-w-[1600px] px-5 py-16 md:px-10 md:py-24 lg:px-12">
+        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr] lg:gap-10">
+          <div>
+            <p className="font-playfair text-3xl leading-tight">The Barber Shop</p>
+            <p className="mt-2 text-xs uppercase tracking-[0.25em] text-barber-gold">Waterloo · London</p>
+            <p className="mt-6 max-w-xs text-sm leading-relaxed text-barber-grey">A moment to slow down, a cut made for you. Find us just by the London Eye.</p>
+            <a href={bookingUrl} target="_blank" rel="noopener noreferrer" className="mt-6 inline-block border-b border-barber-gold pb-1 text-sm font-semibold text-barber-gold hover:text-barber-cream">Book an appointment <span aria-hidden="true">↗</span></a>
           </div>
+          <div>
+            <h2 className="mb-5 text-xs uppercase tracking-[0.2em] text-barber-gold">Opening hours</h2>
+            <dl className="space-y-3 text-sm text-barber-grey">
+              <div><dt>Monday – Friday</dt><dd className="mt-1 text-barber-cream">9:30 – 19:00</dd></div>
+              <div><dt>Saturday – Sunday</dt><dd className="mt-1 text-barber-cream">10:00 – 17:00</dd></div>
+            </dl>
+          </div>
+          <div>
+            <h2 className="mb-5 text-xs uppercase tracking-[0.2em] text-barber-gold">Visit & contact</h2>
+            <address className="space-y-3 text-sm not-italic leading-relaxed text-barber-grey">
+              <p>4 Milner Pl<br />London SE1 7PE</p>
+              <p><a href="mailto:cut@waterloobarber.shop" className="hover:text-barber-cream">cut@waterloobarber.shop</a></p>
+              <p><a href="https://maps.app.goo.gl/9ywRjxBrBzCKdguP6" target="_blank" rel="noopener noreferrer" className="text-barber-cream underline decoration-barber-gold underline-offset-4">Get directions <span aria-hidden="true">↗</span></a></p>
+            </address>
+          </div>
+          <div>
+            <h2 className="mb-5 text-xs uppercase tracking-[0.2em] text-barber-gold">Follow along</h2>
+            <div className="flex gap-3">
+              <a href="https://instagram.com/thebarbershop.london" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="flex h-11 w-11 items-center justify-center border border-barber-gold/40 text-barber-cream hover:border-barber-gold hover:text-barber-gold"><Instagram size={20} aria-hidden="true" /></a>
+              <a href="https://tiktok.com/@thebarbershop.london" target="_blank" rel="noopener noreferrer" aria-label="TikTok" className="flex h-11 w-11 items-center justify-center border border-barber-gold/40 text-barber-cream hover:border-barber-gold hover:text-barber-gold"><Music2 size={20} aria-hidden="true" /></a>
+            </div>
+            <p className="mt-4 text-sm text-barber-grey">@thebarbershop.london</p>
+          </div>
+        </div>
+        <div className="mt-16 flex flex-col gap-2 border-t border-barber-gold/20 pt-6 text-xs text-barber-grey sm:flex-row sm:justify-between">
+          <p>© {new Date().getFullYear()} The Barber Shop Waterloo.</p>
+          <p>Sharp. Light. Elegant.</p>
         </div>
       </div>
     </footer>

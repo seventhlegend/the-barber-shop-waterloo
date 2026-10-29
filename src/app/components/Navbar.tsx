@@ -1,198 +1,60 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Scissors, Menu, X, Instagram, Music2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Menu, X } from "lucide-react";
 
-const navLinks = [
-  { name: "Services", href: "#services" },
-  { name: "Membership", href: "#membership" },
-  { name: "Experience", href: "#experience" },
-  { name: "Gallery", href: "#gallery" },
-  { name: "About", href: "#about" },
-  { name: "Location", href: "#location" },
+const links = [
+  { label: "Services", href: "#services" },
+  { label: "Membership", href: "#membership" },
+  { label: "The experience", href: "#experience" },
+  { label: "Gallery", href: "#gallery" },
+  { label: "Find us", href: "#location" },
 ];
-
-const socialLinks = [
-  {
-    name: "Instagram",
-    href: "https://instagram.com/thebarbershop.london",
-    icon: Instagram,
-  },
-  {
-    name: "TikTok",
-    href: "https://tiktok.com/@thebarbershop.london",
-    icon: Music2,
-  },
-];
+const bookingUrl = "https://book.squareup.com/appointments/4xq8s10esmdcgp/location/LM3CKN1Y1RJ0P/services";
 
 export default function Navbar() {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 100);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    const onScroll = () => setScrolled(window.scrollY > 30);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const scrollToSection = (href: string) => {
-    const element = document.querySelector(href);
-    element?.scrollIntoView({ behavior: "smooth" });
-    setIsMobileMenuOpen(false);
-  };
+  useEffect(() => {
+    if (!open) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [open]);
 
   return (
-    <>
-      <motion.nav
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.5, delay: 0.5 }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled
-            ? "bg-barber-black/95 backdrop-blur-md border-b border-barber-gold/20 shadow-lg"
-            : "bg-transparent"
-        }`}
-      >
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-20">
-            {/* Logo */}
-            <button
-              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-              className="flex items-center gap-3 group"
-            >
-              <Scissors
-                className="w-8 h-8 text-barber-gold group-hover:rotate-180 transition-transform duration-500"
-                strokeWidth={1.5}
-              />
-              <span className="font-playfair text-xl text-barber-gold hidden sm:block">
-                THE BARBER SHOP
-              </span>
-            </button>
-
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center gap-8">
-              {navLinks.map((link) => (
-                <button
-                  key={link.name}
-                  onClick={() => scrollToSection(link.href)}
-                  className="font-inter text-barber-cream hover:text-barber-gold transition-colors duration-300 relative group"
-                >
-                  {link.name}
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-barber-gold group-hover:w-full transition-all duration-300"></span>
-                </button>
-              ))}
-              <div className="flex items-center gap-3">
-                {socialLinks.map((link) => {
-                  const Icon = link.icon;
-
-                  return (
-                    <a
-                      key={link.name}
-                      href={link.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group w-10 h-10 border border-barber-gold/30 rounded-sm flex items-center justify-center text-barber-gold hover:border-barber-gold hover:bg-barber-gold/10 transition-all duration-300"
-                      aria-label={link.name}
-                    >
-                      <Icon
-                        className="w-5 h-5 group-hover:scale-110 transition-transform"
-                        strokeWidth={1.5}
-                      />
-                    </a>
-                  );
-                })}
-              </div>
-              <a
-                href="https://book.squareup.com/appointments/4xq8s10esmdcgp/location/LM3CKN1Y1RJ0P/services"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-6 py-2 bg-barber-gold text-barber-black font-inter font-semibold rounded-sm hover:bg-barber-cream transition-all duration-300"
-              >
-                Book Now
-              </a>
-            </div>
-
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden w-10 h-10 flex items-center justify-center text-barber-gold"
-              aria-label="Toggle menu"
-            >
-              {isMobileMenuOpen ? (
-                <X className="w-6 h-6" />
-              ) : (
-                <Menu className="w-6 h-6" />
-              )}
-            </button>
-          </div>
+    <header className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${scrolled || open ? "bg-barber-black/95 shadow-lg backdrop-blur-md" : "bg-barber-black/30"}`}>
+      <nav aria-label="Main navigation" className="mx-auto flex h-20 max-w-[1600px] items-center justify-between gap-6 px-5 md:px-10 lg:px-12">
+        <a href="#top" onClick={() => setOpen(false)} className="shrink-0 text-barber-cream" aria-label="The Barber Shop, home">
+          <span className="block font-playfair text-xl leading-none tracking-wide">THE BARBER SHOP</span>
+          <span className="mt-1 block text-[10px] uppercase tracking-[0.3em] text-barber-gold">Waterloo · London</span>
+        </a>
+        <div className="hidden items-center gap-7 lg:flex">
+          {links.map((link) => (
+            <a key={link.href} href={link.href} className="text-sm text-barber-cream/85 transition-colors hover:text-barber-gold">{link.label}</a>
+          ))}
+          <a href={bookingUrl} target="_blank" rel="noopener noreferrer" className="border border-barber-gold bg-barber-gold px-5 py-3 text-sm font-semibold text-barber-black transition-colors hover:bg-barber-cream hover:border-barber-cream">Book an appointment <span aria-hidden="true">↗</span></a>
         </div>
-      </motion.nav>
-
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, x: "100%" }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: "100%" }}
-            transition={{ duration: 0.3 }}
-            className="fixed top-20 left-0 right-0 bottom-0 bg-barber-black/98 backdrop-blur-lg z-40 md:hidden"
-          >
-            <div className="container mx-auto px-4 py-8">
-              <div className="flex flex-col gap-6">
-                {navLinks.map((link, index) => (
-                  <motion.button
-                    key={link.name}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    onClick={() => scrollToSection(link.href)}
-                    className="font-playfair text-2xl text-barber-cream hover:text-barber-gold transition-colors duration-300 text-left py-3 border-b border-barber-gold/20"
-                  >
-                    {link.name}
-                  </motion.button>
-                ))}
-                <motion.a
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5 }}
-                  href="https://book.squareup.com/appointments/4xq8s10esmdcgp/location/LM3CKN1Y1RJ0P/services"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-6 px-8 py-4 bg-barber-gold text-barber-black font-inter font-semibold text-center rounded-sm hover:bg-barber-cream transition-all duration-300"
-                >
-                  Book Your Appointment
-                </motion.a>
-                <div className="flex items-center gap-4 pt-2">
-                  {socialLinks.map((link) => {
-                    const Icon = link.icon;
-
-                    return (
-                      <a
-                        key={link.name}
-                        href={link.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group w-12 h-12 border-2 border-barber-gold/30 rounded-sm flex items-center justify-center hover:border-barber-gold hover:bg-barber-gold/10 transition-all duration-300"
-                        aria-label={link.name}
-                      >
-                        <Icon
-                          className="w-6 h-6 text-barber-gold group-hover:scale-110 transition-transform"
-                          strokeWidth={1.5}
-                        />
-                      </a>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
+        <button type="button" onClick={() => setOpen((value) => !value)} aria-expanded={open} aria-controls="mobile-navigation" aria-label={open ? "Close menu" : "Open menu"} className="flex h-11 w-11 items-center justify-center text-barber-cream lg:hidden">
+          {open ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
+        </button>
+      </nav>
+      <div id="mobile-navigation" hidden={!open} className="max-h-[calc(100dvh-5rem)] overflow-y-auto border-t border-barber-gold/20 bg-barber-black px-5 pb-7 pt-3 lg:hidden">
+        {links.map((link) => (
+          <a key={link.href} href={link.href} onClick={() => setOpen(false)} className="block border-b border-barber-gold/15 py-4 font-playfair text-xl text-barber-cream">{link.label}</a>
+        ))}
+        <a href={bookingUrl} target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)} className="mt-6 block bg-barber-gold px-5 py-4 text-center font-semibold text-barber-black">Book an appointment <span aria-hidden="true">↗</span></a>
+      </div>
+    </header>
   );
 }

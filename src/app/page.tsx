@@ -1,5 +1,4 @@
 import Navbar from "./components/Navbar";
-import WelcomePopup from "./components/WelcomePopup";
 import Hero from "./components/Hero";
 import About from "./components/About";
 import Services from "./components/Services";
@@ -12,8 +11,7 @@ import MembershipWithPhoto from "./components/MembershipWithPhoto";
 
 export default function Home() {
   return (
-    <main className="bg-barber-black overflow-x-hidden">
-      <WelcomePopup />
+    <main id="top" className="bg-barber-black overflow-x-hidden">
       <Navbar />
       <Hero />
       <Services />
