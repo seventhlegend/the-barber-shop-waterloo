@@ -1,0 +1,8 @@
+allowBuilds:
+  esbuild: true
+  workerd: true
+  '@tailwindcss/oxide': true
+  sharp: true
+minimumReleaseAgeExclude:
+  - miniflare@5.20261023.3-beta
+  - wrangler@4.156.0

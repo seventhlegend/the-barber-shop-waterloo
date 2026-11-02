@@ -37,6 +37,7 @@ export default function Services() {
           <div className="flex flex-col justify-end md:col-span-5 md:col-start-8">
             <p className="max-w-md text-base leading-7 text-barber-grey md:text-lg">From a clean clipper cut to the full hot-towel treatment, find the service that feels right for you.</p>
             <a href={bookingUrl} target="_blank" rel="noopener noreferrer" className="mt-6 inline-flex min-h-12 w-fit items-center gap-2 font-semibold text-barber-gold underline decoration-barber-gold/50 underline-offset-8 transition-colors hover:text-barber-cream focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-barber-gold">Book an appointment <ArrowUpRight aria-hidden="true" className="h-4 w-4" /></a>
+            <a href="/booking-demo/" className="mt-3 inline-flex min-h-11 w-fit items-center text-sm text-barber-grey underline underline-offset-4 hover:text-barber-cream">Book Daytime Services here on our site</a>
           </div>
         </div>
 
