@@ -5,7 +5,7 @@ Bu belge mevcut kodun tek bakım/kurulum rehberidir. Son düzenleme: 2 Kasım 20
 ## 1. Sistemin parçaları
 
 - `/`: Statik tanıtım sitesi; hizmetler, üyelikler, galeri, adres ve iletişim.
-- `/book/`: Daytime Services ve VIP After Hours arasında seçim.
+- `/book/`: Az metinli iki büyük bağlantıyla Daytime ve VIP After Hours seçimi; her ikisi de mobilde ilk ekranda görünür. Kısa saat etiketleri ortak saat politikasından türetilir; ayrıntılar kategori sayfasında gösterilir.
 - `/book/daytime/`: Yalnızca Daytime Square kategorisi ile rezervasyon.
 - `/book/vip/`: Yalnızca VIP After Hours Square kategorisi ile rezervasyon.
 - Eski `/booking-demo/` adresi Cloudflare `_redirects` ve yerel sunucuda kalıcı olarak `/book/` adresine yönlenir. Demo etiketi kaldırılmıştır.

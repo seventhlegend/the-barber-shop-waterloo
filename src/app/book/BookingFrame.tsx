@@ -5,13 +5,13 @@ import './booking.css';
 
 export default function BookingFrame({ children, selection = false }: { children: ReactNode; selection?: boolean }) {
   return (
-    <div className="booking">
+    <div className={`booking${selection ? ' booking-selection-frame' : ''}`}>
       <header className="booking-header">
         <a className="booking-wordmark" href="/">The Barber Shop<span>Waterloo, London</span></a>
-        <a className="booking-home" href={selection ? '/' : BOOKING_PATH}><ArrowLeft size={16} aria-hidden="true" />{selection ? 'Back to the shop' : 'Booking options'}</a>
+        <a className="booking-home" href={selection ? '/' : BOOKING_PATH}><ArrowLeft size={16} aria-hidden="true" />{selection ? 'Back' : 'Booking options'}</a>
       </header>
       <main>{children}</main>
-      <footer className="booking-footer">The Barber Shop · Waterloo <span>London time, always.</span></footer>
+      <footer className="booking-footer">{selection ? 'London time · Pay at the shop' : <>The Barber Shop · Waterloo <span>London time, always.</span></>}</footer>
     </div>
   );
 }
