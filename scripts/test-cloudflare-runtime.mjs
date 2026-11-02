@@ -26,7 +26,16 @@ try {
   const database = await runtime.getD1Database('CHECKOUT_DB');
   for (const statement of CHECKOUT_SCHEMA.split(';').map(value => value.trim()).filter(Boolean)) await database.prepare(statement).run();
   assert.equal((await runtime.dispatchFetch('https://shop.test/')).status, 200);
-  assert.equal((await runtime.dispatchFetch('https://shop.test/booking-demo/')).status, 200);
+  for (const path of ['/book/', '/book/daytime/', '/book/vip/']) {
+    const response = await runtime.dispatchFetch(`https://shop.test${path}`);
+    assert.equal(response.status, 200, path);
+    assert.ok(!(await response.text()).includes('book.squareup.com'), `${path} must keep booking on this site`);
+  }
+  const home = await (await runtime.dispatchFetch('https://shop.test/')).text();
+  assert.ok(home.includes('href="/book/"'), 'The home page must link to the booking selection.');
+  assert.ok(!home.includes('book.squareup.com'), 'No home-page CTA may send visitors to Square hosted booking.');
+  assert.ok((await readFile('out/_redirects', 'utf8')).includes('/booking-demo/* /book/ 301'), 'Cloudflare must redirect the old demo URL.');
+  assert.ok((await readFile('out/_headers', 'utf8')).startsWith('/book/*\n'), 'Booking pages must retain their Content Security Policy.');
   for (const path of ['/_worker.js', '/.env', '/server/checkout.mjs', '/assets/private.js.map']) assert.equal((await runtime.dispatchFetch(`https://shop.test${path}`)).status, 404);
   const config = await runtime.dispatchFetch('https://shop.test/api/booking/config');
   assert.equal(config.status, 503, 'No Square secrets were loaded, so the API must fail closed.');

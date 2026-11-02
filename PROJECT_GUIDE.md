@@ -5,7 +5,10 @@ Bu belge mevcut kodun tek bakım/kurulum rehberidir. Son düzenleme: 2 Kasım 20
 ## 1. Sistemin parçaları
 
 - `/`: Statik tanıtım sitesi; hizmetler, üyelikler, galeri, adres ve iletişim.
-- `/booking-demo/`: Daytime ve VIP ile site içi Square rezervasyonu. Adres ve “Booking demo” etiketi korunur.
+- `/book/`: Daytime Services ve VIP After Hours arasında seçim.
+- `/book/daytime/`: Yalnızca Daytime Square kategorisi ile rezervasyon.
+- `/book/vip/`: Yalnızca VIP After Hours Square kategorisi ile rezervasyon.
+- Eski `/booking-demo/` adresi Cloudflare `_redirects` ve yerel sunucuda kalıcı olarak `/book/` adresine yönlenir. Demo etiketi kaldırılmıştır.
 - `/api/booking/*`: Cloudflare Worker sunucu API'si. Square tokenı yalnız burada kullanılır.
 - **Square:** Katalog, fiyat, süre, personel ataması, çalışma saatleri, gerçek müşteri ve randevu kayıtlarının kaynağıdır.
 - **D1:** Sitenin 10 dakikalık tutmaları, çakışma/işlem kilitleri, tekrar deneme kayıtları, hız sınırı ve webhook tekrarlarını tutar.
@@ -21,9 +24,9 @@ flowchart LR
 
 ### Ana sayfa ve booking arasındaki fark
 
-Ana sayfanın hizmet/üyelik fiyat metinleri ve gösterilen açılış saatleri React bileşenlerinde **editoryal, statik** içeriktir. Square senkronizasyonu `/booking-demo/` içindeki hizmet/fiyat/müsaitlik için geçerlidir. Ana sayfa metnini değiştirmek için ilgili bileşeni düzenleyip build al.
+Ana sayfanın hizmet/üyelik fiyat metinleri ve gösterilen açılış saatleri React bileşenlerinde **editoryal, statik** içeriktir. Square senkronizasyonu `/book/daytime/` ve `/book/vip/` içindeki hizmet/fiyat/müsaitlik için geçerlidir. Ana sayfa metnini değiştirmek için ilgili bileşeni düzenleyip build al.
 
-Ana sayfanın ana rezervasyon butonları hâlâ Square'ın barındırdığı rezervasyon sayfasına gider. Services bölümünde `/booking-demo/` için ayrıca site içi bağlantı vardır. Site içi akışı bütün CTA'lara taşımak mevcut davranışın parçası değildir.
+Ana sayfadaki tüm “Book an appointment” bağlantıları aynı sekmede `/book/` seçim sayfasına gider. Square’ın barındırdığı rezervasyon sayfasına yönlendirme yoktur. Kategori adresleri `src/lib/booking-routes.ts` dosyasındadır. Ortak `BookingFlow` kategori prop’unu sayfadan alır; kategori form içinde değiştirilemez. Sayfa ve API aynı Square kategori/saat politikasını kullanır. Eski oturumdaki tutma/rezervasyon başka kategoriye aitse o kategorinin adresinde devam bağlantısı gösterilir; yanlış kategoride servis seçilmez ve tutma süresi uzatılmaz.
 
 Üyelik butonları e-posta uygulamasını açar; üyelik tahsilatı veya otomatik indirim uygulamaz. Galeri görselleri tam boy yeni sekmede açılır. Harita OpenStreetMap iframe'i, yol tarifi Google Maps bağlantısıdır. Mobil menü ve yukarı çık düğmesi client bileşenleridir. Yerleşik mesaj/e-posta gönderme veya analytics servisi yoktur.
 
@@ -33,8 +36,11 @@ Ana sayfanın ana rezervasyon butonları hâlâ Square'ın barındırdığı rez
 | --- | --- |
 | `src/app/page.tsx`, `components/` | Ana sayfa ve editoryal içerik |
 | `src/app/layout.tsx`, `globals.css` | Metadata, Playfair/Inter fontları, marka stilleri |
-| `src/app/booking-demo/BookingDemo.tsx` | Hizmet → saat → bilgiler → inceleme → sonuç |
-| `src/app/booking-demo/BookingPolicy.tsx` | Square iptal politikasının görünümü |
+| `src/app/book/page.tsx`, `daytime/page.tsx`, `vip/page.tsx` | Seçim sayfası ve kategoriye sabitlenmiş rezervasyon adresleri |
+| `src/lib/booking-routes.ts` | Site içi CTA adresi ve kategori başlıkları/bağlantıları |
+| `src/app/book/BookingFrame.tsx`, `booking.css` | Ortak marka başlığı, sayfa çerçevesi ve mobil/masaüstü stilleri |
+| `src/app/book/BookingFlow.tsx` | Hizmet → saat → bilgiler → inceleme → sonuç |
+| `src/app/book/BookingPolicy.tsx` | Square iptal politikasının görünümü |
 | `src/lib/booking-policy.mjs` | Frontend ve API'nin ortak kategori/saat/personel/tutma kuralları |
 | `server/booking-catalog.mjs` | Square hizmetlerini doğrulama ve fiyat çözümleme |
 | `server/square-booking.mjs` | API yönlendirme, Square çağrı izin listesi, canlı müsaitlik |
@@ -197,12 +203,12 @@ pnpm env:init
 
 ```sh
 pnpm env:check
-pnpm demo
+pnpm book
 ```
 
-`demo` build alır, `http://localhost:3000/booking-demo/` üzerinde statik dosya + gerçek yerel API sunar. `BOOKING_ENABLED=false` iken Square katalog/müsaitlik incelenebilir; tutma/gerçek rezervasyon kapalıdır. `true` Production'da **gerçek müşteri/randevu oluşturur**; test için son Confirm düğmesine basma.
+`book` build alır, `http://localhost:3000/book/` üzerinde statik dosya + gerçek yerel API sunar. `BOOKING_ENABLED=false` iken Square katalog/müsaitlik incelenebilir; tutma/gerçek rezervasyon kapalıdır. `true` Production'da **gerçek müşteri/randevu oluşturur**; test için son Confirm düğmesine basma.
 
-`pnpm dev` yalnız Next frontend geliştirmesidir; Square API sunucusunu başlatmaz. Değişikliği gerçek API ile görmek için `pnpm demo` ile build al. `pnpm start`, `serve`, `demo:serve` önceki `out/` çıktısını yerel API ile sunar; `.env` ve build gerekir. Port `BOOKING_DEMO_PORT` ile değişir.
+`pnpm dev` yalnız Next frontend geliştirmesidir; Square API sunucusunu başlatmaz. Değişikliği gerçek API ile görmek için `pnpm book` ile build al. `pnpm start`, `serve`, `book:serve` önceki `out/` çıktısını yerel API ile sunar; `.env` ve build gerekir. Port uyumluluk için korunan `BOOKING_DEMO_PORT` ile değişir. Eski `pnpm demo` / `demo:serve` komutları `book` / `book:serve` alias’larıdır.
 
 Yerel veri `.booking-data/checkouts.sqlite`, fallback key `.booking-data/recovery-secret` içindedir. İkisi de Git/ZIP dışındadır. Mevcut işlemler için dizini veya `.env` anahtarını silme.
 
@@ -214,7 +220,7 @@ Yerel veri `.booking-data/checkouts.sqlite`, fallback key `.booking-data/recover
 4. Tatar/Beyhan'ı bookable yap, VIP hizmetlerine ata. Gün/gece aralıklarını staff bookable hours içinde yönet. `20:00–00:00` bitişi ertesi gün gece yarısıdır; gündüz aralarını koru.
 5. Site VIP'de yalnız `VIP_STAFF_IDS` kişilerini kabul eder; yeni kişi eklemek bilinçli kod değişikliğidir.
 6. İptal politikasını Square'da düzenle. Square tüketici hesabına giriş ve otomatik e-posta/SMS bu entegrasyonun işlevleri değildir.
-7. Yeni hesap/lokasyonda kimlikleri ve ana sayfa/booking Square fallback linklerini güncelle.
+7. Yeni hesap/lokasyonda Square kategori, servis, uzman ve lokasyon kimliklerini güncelle. Site içi rezervasyon adresleri `src/lib/booking-routes.ts` dosyasından yönetilir.
 
 Square personel saatleri diğer online kanallarla ortaktır; sitedeki kategori filtresi Square'ın hosted booking sayfasını kısıtlamaz.
 
@@ -285,7 +291,7 @@ Ham gövde+tam URL için HMAC-SHA256 doğrulanır, event ID D1'de tekilleştiril
 | `pnpm test:cloudflare-runtime` | Son build'i gerçek workerd ve test D1 ile kontrol |
 | `pnpm release:zip` | Env kontrolü, tüm testler, build, runtime testi, denetimli ZIP/SHA-256 |
 
-Son `the-barber-shop-cloudflare-build-….zip` dosyasını Pages → Create deployment ile yükle. ZIP kökünde `index.html`, `_next/`, `booking-demo/`, `_worker.js`, `_routes.json`, `_headers` vardır; dışta `out/` klasörü yoktur. `.sha256` yükleme dosyası değildir. `_routes.json` experimental uyarısı tek başına deploy hatası değildir; canlı API'yi doğrula.
+Son `the-barber-shop-cloudflare-build-….zip` dosyasını Pages → Create deployment ile yükle. ZIP kökünde `index.html`, `_next/`, `book/` (daytime/vip dahil), `_redirects`, `_worker.js`, `_routes.json`, `_headers` vardır; dışta `out/` klasörü yoktur. `.sha256` yükleme dosyası değildir. `_routes.json` experimental uyarısı tek başına deploy hatası değildir; canlı API'yi doğrula.
 
 Release ZIP'i geçici dizine açıp tekrar denetler. `.env`, token, DB, source map, ham server kaynakları veya online ödeme SDK/API kodu varsa paket reddedilir. Git push ve Pages deploy ayrı işlemdir; manual upload projesinde ZIP ayrıca yüklenir. Repo CLI tokenı veya otomatik yayın yetkisi içermez.
 
@@ -310,7 +316,7 @@ Release ZIP'i geçici dizine açıp tekrar denetler. `.env`, token, DB, source m
 | 429 | Bir dakika bekle; hızlı tekrar sorgulamayı bırak. |
 | VIP saati yok | Doğru kategori, Tatar/Beyhan ataması, gerçek Square gece müsaitliği, 90 dakika ve gece yarısı sınırı. |
 | Yeni fiyat/saat yok | Yenile; açıklamada eski fiyat kalmış olabilir. Ana sayfa fiyat metni ayrıca statiktir. |
-| Yerelde `/api` yok | Yalnız `pnpm dev` yerine `pnpm demo`. |
+| Yerelde `/api` yok | Yalnız `pnpm dev` yerine `pnpm book`. |
 | Eski tutma | Yenilemek uzatmaz. Yeni saat seç veya süre sonunu bekle. Gönderilmiş işlemde aynı referansla status kontrolü yap. |
 | Key değişiminden sonra status çözülemiyor | Eski Secret'ı geri koy; DB'yi silme, yeni key ile açmaya çalışma. |
 | Webhook 404/403 | İmza key'i, tam URL, event tipi ve DB binding. İmzasız isteğin reddi beklenir. |

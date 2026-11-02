@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
+import { BOOKING_PATH } from "../../lib/booking-routes";
 
 const links = [
   { label: "Services", href: "#services" },
@@ -10,7 +11,6 @@ const links = [
   { label: "Gallery", href: "#gallery" },
   { label: "Find us", href: "#location" },
 ];
-const bookingUrl = "https://book.squareup.com/appointments/4xq8s10esmdcgp/location/LM3CKN1Y1RJ0P/services";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -43,7 +43,7 @@ export default function Navbar() {
           {links.map((link) => (
             <a key={link.href} href={link.href} className="text-sm text-barber-cream/85 transition-colors hover:text-barber-gold">{link.label}</a>
           ))}
-          <a href={bookingUrl} target="_blank" rel="noopener noreferrer" className="border border-barber-gold bg-barber-gold px-5 py-3 text-sm font-semibold text-barber-black transition-colors hover:bg-barber-cream hover:border-barber-cream">Book an appointment <span aria-hidden="true">↗</span></a>
+          <a href={BOOKING_PATH} className="border border-barber-gold bg-barber-gold px-5 py-3 text-sm font-semibold text-barber-black transition-colors hover:bg-barber-cream hover:border-barber-cream">Book an appointment <span aria-hidden="true">↗</span></a>
         </div>
         <button type="button" onClick={() => setOpen((value) => !value)} aria-expanded={open} aria-controls="mobile-navigation" aria-label={open ? "Close menu" : "Open menu"} className="flex h-11 w-11 items-center justify-center text-barber-cream lg:hidden">
           {open ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
@@ -53,7 +53,7 @@ export default function Navbar() {
         {links.map((link) => (
           <a key={link.href} href={link.href} onClick={() => setOpen(false)} className="block border-b border-barber-gold/15 py-4 font-playfair text-xl text-barber-cream">{link.label}</a>
         ))}
-        <a href={bookingUrl} target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)} className="mt-6 block bg-barber-gold px-5 py-4 text-center font-semibold text-barber-black">Book an appointment <span aria-hidden="true">↗</span></a>
+        <a href={BOOKING_PATH} onClick={() => setOpen(false)} className="mt-6 block bg-barber-gold px-5 py-4 text-center font-semibold text-barber-black">Book an appointment <span aria-hidden="true">↗</span></a>
       </div>
     </header>
   );

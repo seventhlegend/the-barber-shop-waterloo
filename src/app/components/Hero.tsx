@@ -1,6 +1,5 @@
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";
-
-const bookingUrl = "https://book.squareup.com/appointments/4xq8s10esmdcgp/location/LM3CKN1Y1RJ0P/services";
+import { BOOKING_PATH } from "../../lib/booking-routes";
 
 export default function Hero() {
   return (
@@ -15,7 +14,7 @@ export default function Hero() {
               A good cut and a little time for yourself. Classic grooming and a moment to unwind, just moments from the London Eye.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-5 lg:mt-9">
-              <a href={bookingUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-14 items-center gap-4 bg-barber-gold px-6 font-semibold text-barber-black transition-colors hover:bg-[#e3c65c] lg:hover:bg-barber-cream">
+              <a href={BOOKING_PATH} className="inline-flex min-h-14 items-center gap-4 bg-barber-gold px-6 font-semibold text-barber-black transition-colors hover:bg-[#e3c65c] lg:hover:bg-barber-cream">
                 Book an appointment <ArrowUpRight aria-hidden="true" size={19} />
               </a>
               <a href="#services" className="inline-flex min-h-12 items-center gap-2 text-barber-black underline decoration-[#806219] underline-offset-8 hover:text-[#806219] lg:text-barber-cream lg:decoration-barber-gold lg:hover:text-barber-gold">

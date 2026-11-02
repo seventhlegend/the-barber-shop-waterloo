@@ -1,6 +1,6 @@
 # The Barber Shop Waterloo
 
-Next.js statik tanıtım sitesi ve Square'a bağlı site içi rezervasyon. Canlı ortam Cloudflare Pages + Worker + D1'dır. Rezervasyon `/booking-demo/` adresindedir; ödeme işletmede yapılır.
+Next.js statik tanıtım sitesi ve Square'a bağlı site içi rezervasyon. Canlı ortam Cloudflare Pages + Worker + D1'dır. Rezervasyon seçimi `/book/`, gündüz akışı `/book/daytime/`, VIP akışı `/book/vip/` adresindedir; ödeme işletmede yapılır.
 
 **Sistemin tüm mantığı, Square ayarları, sıfırdan kurulum, yayın, kurtarma ve sorun giderme:** [PROJECT_GUIDE.md](PROJECT_GUIDE.md).
 
@@ -13,10 +13,10 @@ pnpm install --frozen-lockfile
 pnpm env:init
 # .env içine Square Access Token ve Location ID ekle.
 pnpm env:check
-pnpm demo
+pnpm book
 ```
 
-`http://localhost:3000/booking-demo/` açılır. Yeni `.env` dosyasında gerçek rezervasyon kapalıdır (`BOOKING_ENABLED=false`). `env:init` mevcut `.env` dosyasını veya kurtarma anahtarını değiştirmez.
+`http://localhost:3000/book/` açılır. Yeni `.env` dosyasında gerçek rezervasyon kapalıdır (`BOOKING_ENABLED=false`). `env:init` mevcut `.env` dosyasını veya kurtarma anahtarını değiştirmez.
 
 ## Doğrulama ve yayın paketi
 

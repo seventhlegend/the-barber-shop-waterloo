@@ -32,15 +32,16 @@ createServer(async (incoming, outgoing) => {
       return;
     }
     if (!['GET', 'HEAD'].includes(incoming.method)) { outgoing.writeHead(405); outgoing.end(); return; }
+    if (url.pathname === '/booking-demo' || url.pathname.startsWith('/booking-demo/')) { outgoing.writeHead(301, { Location: '/book/' }); outgoing.end(); return; }
     let file = resolve(root, `.${decodeURIComponent(url.pathname)}`);
     if (file !== root && !file.startsWith(root + sep)) { outgoing.writeHead(403); outgoing.end(); return; }
     if ((await stat(file)).isDirectory()) file = resolve(file, 'index.html');
     const data = await readFile(file);
-    const security = extname(file) === '.html' && url.pathname.startsWith('/booking-demo') ? { 'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline'; frame-src 'none'; connect-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; frame-ancestors 'self'; form-action 'self'" } : {};
+    const security = extname(file) === '.html' && (url.pathname === '/book' || url.pathname.startsWith('/book/')) ? { 'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline'; frame-src 'none'; connect-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; frame-ancestors 'self'; form-action 'self'" } : {};
     outgoing.writeHead(200, { 'Content-Type': types[extname(file)] || 'application/octet-stream', 'X-Content-Type-Options': 'nosniff', ...security });
     outgoing.end(incoming.method === 'HEAD' ? undefined : data);
   } catch {
     outgoing.writeHead(404, { 'Content-Type': 'text/plain' });
-    outgoing.end('Not found. Run pnpm build:static before starting the demo.');
+    outgoing.end('Not found. Run pnpm build:static before starting the booking server.');
   }
-}).listen(port, '127.0.0.1', () => console.log(`Booking demo: http://localhost:${port}/booking-demo/`));
+}).listen(port, '127.0.0.1', () => console.log(`Booking: http://localhost:${port}/book/`));

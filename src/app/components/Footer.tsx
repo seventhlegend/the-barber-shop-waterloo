@@ -1,6 +1,5 @@
 import { Instagram, Music2 } from "lucide-react";
-
-const bookingUrl = "https://book.squareup.com/appointments/4xq8s10esmdcgp/location/LM3CKN1Y1RJ0P/services";
+import { BOOKING_PATH } from "../../lib/booking-routes";
 
 export default function Footer() {
   return (
@@ -11,7 +10,7 @@ export default function Footer() {
             <p className="font-playfair text-3xl leading-tight">The Barber Shop</p>
             <p className="mt-2 text-xs uppercase tracking-[0.25em] text-barber-gold">Waterloo · London</p>
             <p className="mt-6 max-w-xs text-sm leading-relaxed text-barber-grey">A moment to slow down, a cut made for you. Find us just by the London Eye.</p>
-            <a href={bookingUrl} target="_blank" rel="noopener noreferrer" className="mt-6 inline-block border-b border-barber-gold pb-1 text-sm font-semibold text-barber-gold hover:text-barber-cream">Book an appointment <span aria-hidden="true">↗</span></a>
+            <a href={BOOKING_PATH} className="mt-6 inline-block border-b border-barber-gold pb-1 text-sm font-semibold text-barber-gold hover:text-barber-cream">Book an appointment <span aria-hidden="true">↗</span></a>
           </div>
           <div>
             <h2 className="mb-5 text-xs uppercase tracking-[0.2em] text-barber-gold">Opening hours</h2>

@@ -2,9 +2,9 @@
 
 import { FormEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { ArrowLeft, ArrowRight, CalendarDays, ChevronLeft, ChevronRight, Clock3, RefreshCw } from 'lucide-react';
-import { DAYTIME_CATEGORY_ID, DAYTIME_NOTICE, VIP_CATEGORY_ID, VIP_NOTICE, VIP_STAFF_NOTICE, isServiceSlot } from '../../lib/booking-policy.mjs';
+import { DAYTIME_NOTICE, VIP_CATEGORY_ID, VIP_NOTICE, VIP_STAFF_NOTICE, isServiceSlot } from '../../lib/booking-policy.mjs';
+import { bookingCategories, type BookingCategory } from '../../lib/booking-routes';
 import BookingPolicy, { CancellationPolicy } from './BookingPolicy';
-import './booking-demo.css';
 
 type Slot = { id: string; startAt: string; staffId: string; staffName: string; durationMinutes: number };
 type Staff = { id: string; name: string };
@@ -18,7 +18,6 @@ const holdStorageKey = 'waterloo-appointment-hold';
 const newReference = () => ({ id: crypto.randomUUID(), token: Array.from(crypto.getRandomValues(new Uint8Array(32)), byte => byte.toString(16).padStart(2, '0')).join('') });
 const amount = (pence: number) => new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(pence / 100);
 const checkoutStorageKey = 'waterloo-current-checkout';
-const squareUrl = 'https://book.squareup.com/appointments/4xq8s10esmdcgp/location/LM3CKN1Y1RJ0P/services';
 const money = (pence: number) => pence === 0 ? 'Free' : new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP', maximumFractionDigits: 2 }).format(pence / 100);
 const time = (value: string) => new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/London', hour: '2-digit', minute: '2-digit' }).format(new Date(value));
 const fullDate = (value: string) => new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/London', weekday: 'long', day: 'numeric', month: 'long' }).format(new Date(`${value}T12:00:00Z`));
@@ -26,19 +25,21 @@ const fullDate = (value: string) => new Intl.DateTimeFormat('en-GB', { timeZone:
 async function api<T>(path: string, body?: object, signal?: AbortSignal): Promise<T> {
   const response = await fetch(`/api/booking/${path}`, { ...(body ? { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) } : {}), cache: 'no-store', signal });
   let data;
-  try { data = await response.json(); } catch { throw new Error('The calendar service is unavailable. Please retry or use Square booking.'); }
+  try { data = await response.json(); } catch { throw new Error('The calendar service is unavailable. Please retry or contact the shop.'); }
   if (!response.ok) throw Object.assign(new Error(data.error || 'The calendar could not be loaded. Please try again.'), { status: response.status });
   return data;
 }
 
-export default function BookingDemo() {
+export default function BookingFlow({ category }: { category: BookingCategory }) {
+  const categoryDetails = bookingCategories[category];
+  const categoryId = categoryDetails.id;
+  const [previousCategory, setPreviousCategory] = useState<BookingCategory | null>(null);
   const [config, setConfig] = useState<Config | null>(null);
   const [configError, setConfigError] = useState('');
   const [configAttempt, setConfigAttempt] = useState(0);
   const [date, setDate] = useState('');
   const [staffId, setStaffId] = useState('any');
   const [serviceId, setServiceId] = useState('');
-  const [categoryId, setCategoryId] = useState(DAYTIME_CATEGORY_ID);
   const [serviceSearch, setServiceSearch] = useState('');
   const [slots, setSlots] = useState<Slot[]>([]);
   const [selected, setSelected] = useState<Slot | null>(null);
@@ -84,9 +85,12 @@ export default function BookingDemo() {
       const saved = JSON.parse(stored) as ReservationReference;
       if (!saved.id || !saved.token) return;
       setReference(saved); setStage('result');
-      api<Reservation>('reservation/status', saved).then(setCheckout).catch(() => setError('We could not check your previous booking. Use “Check booking status” before making another reservation.'));
+      api<Reservation>('reservation/status', saved).then(value => {
+        if (!value.legacy && value.service.categoryId !== categoryId) { setPreviousCategory(value.service.categoryId === VIP_CATEGORY_ID ? 'vip' : 'daytime'); return; }
+        setCheckout(value);
+      }).catch(() => setError('We could not check your previous booking. Use “Check booking status” before making another reservation.'));
     } catch { /* Storage may be unavailable in private browsing. */ }
-  }, []);
+  }, [categoryId]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -94,20 +98,26 @@ export default function BookingDemo() {
       const stored = sessionStorage.getItem(holdStorageKey);
       if (stored) {
         const saved = JSON.parse(stored) as ReservationReference;
-        setHoldReference(saved);
         api<Hold>('hold/status', saved, controller.signal).then(value => {
+          // One shared hold survives old URLs and navigation between categories.
+          // Resume it only on its own route; never replace this page's category.
+          if (value.service.categoryId !== categoryId) {
+            if ((value.status === 'ACTIVE' && Date.parse(value.expiresAt) > Date.parse(value.serverNow)) || value.status === 'CONSUMED') setPreviousCategory(value.service.categoryId === VIP_CATEGORY_ID ? 'vip' : 'daytime');
+            return;
+          }
+          setHoldReference(saved);
           applyHold(value);
           if (value.status === 'CONSUMED') {
             setReference(saved); setStage('result');
             void api<Reservation>('reservation/status', saved).then(setCheckout).catch(() => setError('Check this reservation with the shop before booking again.'));
           } else if (!sessionStorage.getItem(checkoutStorageKey)) {
-            setDate(value.date); setServiceId(value.service.id); setCategoryId(value.service.categoryId); setStaffId(value.slot.staffId); setSelected(value.slot); setStage('details');
+            setDate(value.date); setServiceId(value.service.id); setStaffId(value.slot.staffId); setSelected(value.slot); setStage('details');
           }
         }).catch(() => { if (!controller.signal.aborted) setError('Your previous hold could not be restored. Check your connection before choosing a time again.'); });
       }
     } catch { /* Browser storage is optional. */ }
     return () => controller.abort();
-  }, [applyHold]);
+  }, [applyHold, categoryId]);
 
   useEffect(() => {
     if (!hold || hold.status !== 'ACTIVE') return;
@@ -176,10 +186,8 @@ export default function BookingDemo() {
   }
   function chooseService(next: Service) {
     requestVersion.current++;
-    setCategoryId(next.categoryId); setServiceId(next.id); setStaffId('any'); setSelected(null); setReview(null); setSlots([]); setCheckedAt(''); setConsent(false); setLoading(true); setRefresh(value => value + 1); go('time');
-  }
-  function chooseCategory(id: string) {
-    setCategoryId(id); setServiceSearch(''); setServiceId(''); setSelected(null); setReview(null); setSlots([]); setError('');
+    if (next.categoryId !== categoryId) return;
+    setServiceId(next.id); setStaffId('any'); setSelected(null); setReview(null); setSlots([]); setCheckedAt(''); setConsent(false); setLoading(true); setRefresh(value => value + 1); go('time');
   }
   function changeDay(offset: number) {
     const next = new Date(`${date || config?.today}T12:00:00Z`);
@@ -228,27 +236,20 @@ export default function BookingDemo() {
   const shownDate = shownSlot ? new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/London', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(shownSlot.startAt)) : date;
 
   return (
-    <main className="booking-demo" data-ui>
-      <header className="booking-header">
-        <a className="booking-wordmark" href="/">The Barber Shop<span>Waterloo, London</span></a>
-        <a className="booking-home" href="/#services"><ArrowLeft size={16} aria-hidden="true" /> Back to the shop</a>
-      </header>
       <div className="booking-shell">
         <div className="booking-intro">
-          <h1>Book your next visit.</h1>
-          <p>Choose your daytime or VIP service, your specialist and a time that suits you.</p>
-          <p className="booking-demo-label">Booking demo</p>
-          <p className="booking-demo-note">{!config ? 'Checking the booking calendar…' : config.bookingsEnabled ? config.environment === 'sandbox' ? 'Sandbox booking test · pay at the shop.' : 'Book online. Pay at the shop.' : 'Preview only · online booking is currently unavailable.'}</p>
+          <h1>{categoryDetails.title}</h1>
+          <p>{categoryDetails.description} Choose your service, specialist and time below.</p>
+          <p className="booking-status-note">{!config ? 'Checking the booking calendar…' : config.bookingsEnabled ? config.environment === 'sandbox' ? 'Sandbox booking test · pay at the shop.' : 'Book online. Pay at the shop.' : 'Preview only · online booking is currently unavailable.'}</p>
         </div>
         <ol className="booking-steps" aria-label="Booking progress">
           {stepTitles.map((label, index) => <li key={label} aria-current={current === index ? 'step' : undefined}><span>{index + 1}</span>{label}</li>)}
         </ol>
         <div className="booking-layout">
           <section className="booking-workspace" aria-label="Appointment selection">
-            <h2 ref={titleRef} tabIndex={-1}>{stage === 'result' ? checkout?.status === 'COMPLETE' ? 'Your appointment is confirmed' : (checkout?.status === 'FAILED' || checkout?.status === 'EXPIRED') ? 'Booking not completed' : checkout?.status === 'READY' ? 'Booking not submitted' : checkout?.status === 'NEEDS_ATTENTION' ? 'Please contact the shop' : 'Confirming your booking' : stepTitles[current]}</h2>
-            {configError ? <div className="booking-message" role="alert"><p>{configError}</p><button className="booking-text-button" onClick={() => { setConfigError(''); setLoading(true); setConfigAttempt(value => value + 1); }}>Try again</button><a href={squareUrl} target="_blank" rel="noopener noreferrer">Book with Square</a></div> : !config ? <p role="status" className="booking-loading">Loading the Square calendar…</p> : <>
+            <h2 ref={titleRef} tabIndex={-1}>{previousCategory ? 'Continue your previous appointment' : stage === 'result' ? checkout?.status === 'COMPLETE' ? 'Your appointment is confirmed' : (checkout?.status === 'FAILED' || checkout?.status === 'EXPIRED') ? 'Booking not completed' : checkout?.status === 'READY' ? 'Booking not submitted' : checkout?.status === 'NEEDS_ATTENTION' ? 'Please contact the shop' : 'Confirming your booking' : stepTitles[current]}</h2>
+            {previousCategory ? <div className="booking-message"><p>You already started an appointment in {bookingCategories[previousCategory].title}. Continue there to check its status or choose another appointment.</p><a href={bookingCategories[previousCategory].href}>Continue {bookingCategories[previousCategory].title}<ArrowRight size={16} aria-hidden="true" /></a></div> : configError ? <div className="booking-message" role="alert"><p>{configError}</p><button className="booking-text-button" onClick={() => { setConfigError(''); setLoading(true); setConfigAttempt(value => value + 1); }}>Try again</button><a href="mailto:cut@waterloobarber.shop">Contact the shop</a></div> : !config ? <p role="status" className="booking-loading">Loading the Square calendar…</p> : <>
               {stage === 'service' && <>
-                <div className="booking-categories" role="group" aria-label="Service categories">{config.categories.map(category => <button type="button" key={category.id} aria-pressed={categoryId === category.id} onClick={() => chooseCategory(category.id)}>{category.name}</button>)}</div>
                 <p className="booking-muted">{categoryNotice}</p>
                 {categoryId === VIP_CATEGORY_ID && <p className="booking-muted">{VIP_STAFF_NOTICE}</p>}
                 <label className="booking-service-search">Find a service<input type="search" value={serviceSearch} onChange={event => setServiceSearch(event.target.value)} placeholder="Haircut, colour, nails…" /></label>
@@ -280,7 +281,7 @@ export default function BookingDemo() {
                 {!holdActive && <button type="button" className="booking-text-button" disabled={holdBusy || confirming} onClick={() => void changeAppointment()}>Choose your time again</button>}
               </div>}
               {stage === 'details' && <form onSubmit={preview}>
-                <p className="booking-muted">{config.bookingsEnabled ? 'We’ll use your contact details to create your appointment with The Barber Shop and Square.' : 'Your details stay in this page for the demo. They are not sent to Square or saved.'}</p>
+                <p className="booking-muted">{config.bookingsEnabled ? 'We’ll use your contact details to create your appointment with The Barber Shop and Square.' : 'Your details stay in this page while online booking is unavailable. They are not sent to Square or saved.'}</p>
                 <div className="booking-customer-fields">
                   <label>First name<input autoComplete="given-name" name="givenName" required maxLength={100} value={customer.givenName} onChange={event => setCustomer({ ...customer, givenName: event.target.value })} /></label>
                   <label>Last name<input autoComplete="family-name" name="familyName" required maxLength={100} value={customer.familyName} onChange={event => setCustomer({ ...customer, familyName: event.target.value })} /></label>
@@ -305,7 +306,7 @@ export default function BookingDemo() {
                 <div className="booking-confirm-panel">
                   <h3>{review.price === 0 ? 'Free consultation' : 'Pay at the shop'}</h3>
                   <p className="booking-muted">{review.price === 0 ? 'This consultation is free.' : `The service price is ${money(review.price)}, payable when you visit. No online payment or card details are required.`}</p>
-                  {config.bookingsEnabled ? <button type="button" className="booking-primary" disabled={confirming || !consent || !policyAccepted || !holdActive} onClick={confirmBooking}>{confirming ? 'Confirming your appointment…' : 'Confirm appointment'}<ArrowRight size={18} aria-hidden="true" /></button> : <div className="booking-message"><p>Online booking is currently unavailable. Your time has not been reserved.</p><a href={squareUrl} target="_blank" rel="noopener noreferrer">Book with Square</a></div>}
+                  {config.bookingsEnabled ? <button type="button" className="booking-primary" disabled={confirming || !consent || !policyAccepted || !holdActive} onClick={confirmBooking}>{confirming ? 'Confirming your appointment…' : 'Confirm appointment'}<ArrowRight size={18} aria-hidden="true" /></button> : <div className="booking-message"><p>Online booking is currently unavailable. Your time has not been reserved.</p><a href="mailto:cut@waterloobarber.shop">Contact the shop</a></div>}
                   {error && <div className="booking-message" role="alert"><p>{error}</p><button className="booking-text-button" onClick={() => void changeAppointment()}>Review another time</button></div>}
                 </div>
                 <button className="booking-text-button booking-back" disabled={confirming} onClick={() => go('details')}><ArrowLeft size={16} aria-hidden="true" /> Edit your details</button>
@@ -347,11 +348,9 @@ export default function BookingDemo() {
             {shownService?.totals && <dl className="booking-price-breakdown"><div><dt>Subtotal</dt><dd>{amount(shownService.totals.subtotal)}</dd></div><div><dt>Taxes</dt><dd>{amount(shownService.totals.tax)}</dd></div><div><dt>Total</dt><dd>{amount(shownService.totals.total)}</dd></div><div className="booking-due-today"><dt>Due today</dt><dd>{amount(shownService.totals.dueToday)}</dd></div><div><dt>Due at appointment</dt><dd>{amount(shownService.totals.dueAtAppointment)}</dd></div></dl>}
             <p className="booking-muted">Complimentary whisky, wine, coffee &amp; soft drinks.</p>
             <p className="booking-summary-note">{shownNotice}</p>
-            <a className="booking-fallback" href={squareUrl} target="_blank" rel="noopener noreferrer">Prefer to book now? Visit Square <ArrowRight size={15} aria-hidden="true" /></a>
+            <a className="booking-fallback" href="mailto:cut@waterloobarber.shop">Need a hand? Contact the shop <ArrowRight size={15} aria-hidden="true" /></a>
           </aside>
         </div>
       </div>
-      <footer className="booking-footer">The Barber Shop · Waterloo <span>London time, always.</span></footer>
-    </main>
   );
 }

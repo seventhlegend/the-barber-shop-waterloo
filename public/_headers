@@ -1,4 +1,4 @@
-/booking-demo/*
+/book/*
   Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; frame-src 'none'; connect-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; frame-ancestors 'self'; form-action 'self'
   X-Content-Type-Options: nosniff
   Referrer-Policy: same-origin
