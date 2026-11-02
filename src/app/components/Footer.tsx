@@ -1,5 +1,6 @@
 import { Instagram, Music2 } from "lucide-react";
 import { BOOKING_PATH } from "../../lib/booking-routes";
+import BrandLogo from './BrandLogo';
 
 export default function Footer() {
   return (
@@ -7,8 +8,7 @@ export default function Footer() {
       <div className="mx-auto max-w-[1600px] px-5 py-16 md:px-10 md:py-24 lg:px-12">
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr] lg:gap-10">
           <div>
-            <p className="font-playfair text-3xl leading-tight">The Barber Shop</p>
-            <p className="mt-2 text-xs uppercase tracking-[0.25em] text-barber-gold">Waterloo · London</p>
+            <a href="/" className="inline-flex" aria-label="The Barber Shop Waterloo, home"><BrandLogo /></a>
             <p className="mt-6 max-w-xs text-sm leading-relaxed text-barber-grey">A moment to slow down, a cut made for you. Find us just by the London Eye.</p>
             <a href={BOOKING_PATH} className="mt-6 inline-block border-b border-barber-gold pb-1 text-sm font-semibold text-barber-gold hover:text-barber-cream">Book an appointment <span aria-hidden="true">↗</span></a>
           </div>

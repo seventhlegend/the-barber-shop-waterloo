@@ -30,6 +30,10 @@ Ana sayfadaki tüm “Book an appointment” bağlantıları aynı sekmede `/boo
 
 Üyelik butonları e-posta uygulamasını açar; üyelik tahsilatı veya otomatik indirim uygulamaz. Galeri görselleri tam boy yeni sekmede açılır. Harita OpenStreetMap iframe'i, yol tarifi Google Maps bağlantısıdır. Mobil menü ve yukarı çık düğmesi client bileşenleridir. Yerleşik mesaj/e-posta gönderme veya analytics servisi yoktur.
 
+### Logo ve ikonlar
+
+Siyah–altın B monogramının tek vektör kaynağı `public/logo.svg` dosyasıdır (200×200 viewBox, şeffaf zemin). `BrandLogo.tsx` ana sayfa navigasyonu, footer ve booking başlıklarında aynı Inter yazı logosunu kullanır. SVG değişince `pnpm brand:icons` çalıştır: mevcut PNG dosyalarını 16/32/180 piksel boyutlarıyla ve `src/app/favicon.ico` dosyasını 16–256 piksel çoklu boyutla yeniler. Dosya adları ve formatlar korunur; yeni paket gerekmez, Next’in Sharp bağımlılığı kullanılır. Ardından normal build/release al.
+
 ## 2. Dosyalar ve sorumlulukları
 
 | Dosya/dizin | Sorumluluk |

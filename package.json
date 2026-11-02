@@ -6,6 +6,7 @@
   "engines": { "node": ">=24" },
   "scripts": {
     "dev": "next dev",
+    "brand:icons": "node scripts/generate-brand-icons.mjs",
     "book": "pnpm run build:static && pnpm run book:serve",
     "book:serve": "node --env-file=.env scripts/booking-server.mjs",
     "demo": "pnpm run book",

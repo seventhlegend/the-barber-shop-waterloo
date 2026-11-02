@@ -97,3 +97,11 @@ section[id] {
     scroll-behavior: auto !important;
   }
 }
+
+/* Shared wordmark: the vector mark also supplies every favicon size. */
+.brand-logo { display: inline-flex; align-items: center; gap: 10px; color: var(--barber-cream); }
+.brand-logo-mark { display: block; width: 40px; height: 40px; flex-shrink: 0; }
+.brand-logo-copy { display: flex; flex-direction: column; gap: 6px; }
+.brand-logo-name { font-family: var(--font-inter), sans-serif; font-size: 20px; font-weight: 600; line-height: 1.1; letter-spacing: -.035em; white-space: nowrap; }
+.brand-logo-location { font-family: var(--font-inter), sans-serif; font-size: 10px; font-weight: 400; line-height: 1.2; letter-spacing: .14em; text-transform: uppercase; color: var(--barber-grey); white-space: nowrap; }
+@media (max-width: 680px) { .brand-logo-mark { width: 34px; height: 34px; } .brand-logo-name { font-size: 18px; } }

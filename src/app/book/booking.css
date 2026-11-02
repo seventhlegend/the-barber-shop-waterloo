@@ -1,8 +1,7 @@
 .booking { --booking-panel: #191919; --booking-control: #656565; --booking-rule: #383838; min-height: 100vh; color: var(--barber-cream); background: var(--barber-black); font-size: 16px; line-height: 1.6; }
 .booking a, .booking button, .booking input, .booking select { -webkit-tap-highlight-color: transparent; }
 .booking-header, .booking-footer { max-width: 1280px; margin: auto; padding: 28px 40px; display: flex; justify-content: space-between; align-items: center; gap: 24px; }
-.booking-wordmark { font-family: var(--font-playfair), serif; font-size: 24px; line-height: 1.25; }
-.booking-wordmark span { display: block; margin-top: 6px; font-family: var(--font-inter), sans-serif; font-size: 13px; color: var(--barber-grey); }
+.booking-wordmark { display: inline-flex; flex-shrink: 0; }
 .booking-home { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font-size: 14px; }
 .booking-home:hover, .booking-fallback:hover { color: var(--barber-gold); }
 .booking-shell { max-width: 1180px; margin: 24px auto 72px; padding: 0 40px; }
@@ -150,4 +149,6 @@
 }
 @media (prefers-reduced-motion: reduce) { .booking-choice, .booking-choice > svg { transition: none; } .booking-choice:hover > svg { transform: none; } }
 @media (max-width: 900px) { .booking-layout { grid-template-columns: minmax(0, 1fr) 290px; gap: 28px; } .booking-summary { padding: 22px; } .booking-times { grid-template-columns: repeat(3, minmax(0, 1fr)); } .booking-controls { grid-template-columns: 1fr; gap: 16px; } }
-@media (max-width: 680px) { .booking-header, .booking-footer { padding: 20px; } .booking-wordmark { font-size: 21px; } .booking-home { font-size: 13px; gap: 5px; } .booking-home svg { display: none; } .booking-shell { margin-top: 24px; padding: 0 20px; } .booking-layout { grid-template-columns: minmax(0, 1fr); gap: 32px; } .booking-steps { gap: 12px; justify-content: space-between; } .booking-steps li { flex-direction: column; align-items: flex-start; gap: 8px; font-size: 12px; } .booking h2 { font-size: 20px; } .booking-controls { grid-template-columns: 1fr; } .booking-times { grid-template-columns: repeat(3, minmax(0, 1fr)); } .booking-customer-fields { grid-template-columns: 1fr; } .booking-summary { padding: 24px; } .booking-footer { flex-direction: column; align-items: flex-start; gap: 4px; } }
+@media (max-width: 680px) { .booking-header, .booking-footer { padding: 20px; } .booking-home { font-size: 13px; gap: 5px; } .booking-home svg { display: none; } .booking-shell { margin-top: 24px; padding: 0 20px; } .booking-layout { grid-template-columns: minmax(0, 1fr); gap: 32px; } .booking-steps { gap: 12px; justify-content: space-between; } .booking-steps li { flex-direction: column; align-items: flex-start; gap: 8px; font-size: 12px; } .booking h2 { font-size: 20px; } .booking-controls { grid-template-columns: 1fr; } .booking-times { grid-template-columns: repeat(3, minmax(0, 1fr)); } .booking-customer-fields { grid-template-columns: 1fr; } .booking-summary { padding: 24px; } .booking-footer { flex-direction: column; align-items: flex-start; gap: 4px; } }
+
+@media (max-width: 420px) { .booking-header { gap: 12px; } .booking-header .brand-logo { gap: 8px; } .booking-header .brand-logo-mark { width: 30px; height: 30px; } .booking-header .brand-logo-name { font-size: 16px; } .booking-header .brand-logo-location { font-size: 9px; letter-spacing: .1em; } }

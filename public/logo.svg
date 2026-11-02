@@ -1,13 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
-  <!-- Scissors Icon with Gold Color -->
-  <g transform="translate(100, 100) scale(4)">
-    <!-- Top handle circle -->
-    <circle cx="-6" cy="-6" r="3" stroke="#D4AF37" stroke-width="1.5" fill="none"/>
-    <!-- Bottom handle circle -->
-    <circle cx="-6" cy="6" r="3" stroke="#D4AF37" stroke-width="1.5" fill="none"/>
-    <!-- Scissors blades -->
-    <path d="M -3.88 -3.88 L 0 0" stroke="#D4AF37" stroke-width="1.5" stroke-linecap="round"/>
-    <path d="M 8 -8 L -3.88 3.88" stroke="#D4AF37" stroke-width="1.5" stroke-linecap="round"/>
-    <path d="M 2.8 2.8 L 8 8" stroke="#D4AF37" stroke-width="1.5" stroke-linecap="round"/>
-  </g>
+  <title>The Barber Shop Waterloo</title>
+  <defs>
+    <mask id="precision-cut" maskUnits="userSpaceOnUse" x="0" y="0" width="200" height="200">
+      <path fill="#fff" d="M0 0h200v200H0z"/>
+      <path fill="#000" d="m72 103 86-16 4 8-90 16z"/>
+    </mask>
+  </defs>
+  <path fill="#D4AF37" fill-rule="evenodd" mask="url(#precision-cut)" d="M44 24h59c32 0 51 19 51 45 0 16-9 27-22 33 18 7 28 18 28 36 0 24-19 38-52 38H44V24Zm28 26v39h28c16 0 26-7 26-19 0-13-10-20-26-20H72Zm0 65v35h34c17 0 26-6 26-17 0-12-10-18-26-18H72Z" clip-rule="evenodd"/>
 </svg>

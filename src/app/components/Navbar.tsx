@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { BOOKING_PATH } from "../../lib/booking-routes";
+import BrandLogo from './BrandLogo';
 
 const links = [
   { label: "Services", href: "#services" },
@@ -36,8 +37,7 @@ export default function Navbar() {
     <header className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${scrolled || open ? "bg-barber-black/95 shadow-lg backdrop-blur-md" : "bg-barber-black/30"}`}>
       <nav aria-label="Main navigation" className="mx-auto flex h-20 max-w-[1600px] items-center justify-between gap-6 px-5 md:px-10 lg:px-12">
         <a href="#top" onClick={() => setOpen(false)} className="shrink-0 text-barber-cream" aria-label="The Barber Shop, home">
-          <span className="block font-playfair text-xl leading-none tracking-wide">THE BARBER SHOP</span>
-          <span className="mt-1 block text-[10px] uppercase tracking-[0.3em] text-barber-gold">Waterloo · London</span>
+          <BrandLogo />
         </a>
         <div className="hidden items-center gap-7 lg:flex">
           {links.map((link) => (
