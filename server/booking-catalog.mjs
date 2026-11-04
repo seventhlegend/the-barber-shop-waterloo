@@ -24,24 +24,16 @@ export function serviceFromCatalog(variation, parent, team, locationId) {
   const base = override?.price_money ?? details.price_money;
   if (pricingType !== 'FIXED_PRICING' || base?.currency !== 'GBP' || !Number.isSafeInteger(base.amount) || base.amount < 0) throw new CatalogError('Square has no fixed price for this service. Please contact the shop.');
 
-  // Square's booking page displays price_description instead of price_money when set.
-  // The shop explicitly uses its single GBP amount as the quoted booking price.
-  // Never infer a percentage, select from several amounts or silently charge the base.
-  const priceDescription = (details.price_description || '').trim();
-  let price = base.amount;
-  if (priceDescription) {
-    const amounts = [...priceDescription.matchAll(/£\s*(\d+(?:,\d{3})*(?:\.\d{1,2})?)(?![\d.,])/g)];
-    if (amounts.length !== 1 || /\b(from|starting|between|up\s+to|per|deposit)\b|\d\s*[-–]\s*£|£[^£]*[-–]\s*\d/i.test(priceDescription)) throw new CatalogError('The Square booking price needs clarification. Please contact the shop.');
-    const [pounds, pennies = ''] = amounts[0][1].replaceAll(',', '').split('.');
-    price = Number(pounds) * 100 + Number(pennies.padEnd(2, '0'));
-    if (!Number.isSafeInteger(price) || price < 0) throw new CatalogError('The Square booking price could not be verified. Please contact the shop.');
-  }
+  // Square's numeric price is authoritative. Text is display-only: never parse
+  // a currency amount or percentage from a description to change the price.
+  const price = base.amount;
+  const priceDescription = details.price_description || '';
   const staff = team.filter(member => member.is_bookable && details.team_member_ids?.includes(member.team_member_id) && (categoryId !== VIP_CATEGORY_ID || VIP_STAFF_IDS.includes(member.team_member_id))).map(member => ({ id: member.team_member_id, name: member.display_name }));
   return {
     id: variation.id, categoryId, name: parent.item_data.name,
     description: parent.item_data.description_plaintext || parent.item_data.description || '',
     durationMinutes: details.service_duration / 60000, price, basePrice: base.amount,
-    currency: base.currency, priceDescription, priceSource: priceDescription ? 'SQUARE_PRICE_DESCRIPTION' : 'SQUARE_PRICE_MONEY',
+    currency: base.currency, priceDescription, priceSource: 'SQUARE_PRICE_MONEY',
     earliestStartMinutes: categoryId === DAYTIME_CATEGORY_ID && variation.id === BRAZILIAN_SERVICE_ID ? BRAZILIAN_EARLIEST_START_MINUTES : 0,
     taxIds: parent.item_data.tax_ids || [],
     totals: parent.item_data.tax_ids?.length ? null : { subtotal: price, tax: 0, total: price, dueToday: 0, dueAtAppointment: price },

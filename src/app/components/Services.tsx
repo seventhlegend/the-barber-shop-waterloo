@@ -1,31 +1,32 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { BOOKING_PATH } from "../../lib/booking-routes";
+import { DAYTIME_CATEGORY_ID } from "../../lib/booking-policy.mjs";
 
-const services = [
-  { name: "Cut-Throat Razor Shave / Beard Reshape", price: "£28", category: "Beard & shave", description: "Traditional wet shave or beard redesign using hot towel and steamer." },
-  { name: "Buzz Cut", price: "£36", category: "Hair", description: "Clipper-only haircut with hot towel, quick massage and professional blow-dry." },
-  { name: "The Skin Fade", price: "£38", category: "Hair", description: "Seamless fade, finished with precision detailing and styling." },
-  { name: "Scissor Precision Cut", price: "£38", category: "Hair", description: "A tailored consultation and scissor cut to complement your style." },
-  { name: "Classic Haircut & Styling", price: "£36", category: "Hair", description: "Wash, cut, hot towel, mini massage and blow-dry." },
-  { name: "Hair Clipper Cut", price: "£28", category: "Hair", description: "A clean, single-grade clipper cut." },
-  { name: "Haircut & Beard Cut", price: "£55", category: "Hair & beard", description: "A haircut combined with a wet shave or detailed beard reshape." },
-  { name: "Beard Trim – 'Gimgim Style'", price: "£33", category: "Beard & shave", description: "A sharp beard trim with a hot towel finish." },
-  { name: "Neck Tidy & Finish", price: "£23", category: "Hair", description: "Hot towel, detailed neckline tidy-up and styled finish." },
-  { name: "Waxing", price: "£16", category: "Treatments", description: "Precision facial or ear waxing." },
-  { name: "Facial Mask", price: "£20", category: "Treatments", description: "A deep-cleansing and hydrating facial mask." },
-  { name: "Total Relaxing", price: "£85", category: "Treatments", description: "Haircut, styling, shave, waxing and facial mask." },
-  { name: "Grey Blending", price: "£36", category: "Treatments", description: "Subtle, natural colour blending to soften greys." },
-] as const;
-
-const categories = ["All", "Hair", "Beard & shave", "Treatments"] as const;
-type Category = (typeof categories)[number];
+type Service = { id: string; categoryId: string; name: string; description: string; price: number; currency: string; priceDescription: string };
+type Catalog = { categories: { id: string; name: string }[]; services: Service[] };
+const money = (service: Service) => new Intl.NumberFormat('en-GB', { style: 'currency', currency: service.currency }).format(service.price / 100);
 
 export default function Services() {
-  const [category, setCategory] = useState<Category>("All");
-  const visibleServices = category === "All" ? services : services.filter((service) => service.category === category || (service.category === "Hair & beard" && (category === "Hair" || category === "Beard & shave")));
+  const [catalog, setCatalog] = useState<Catalog | null>(null);
+  const [categoryId, setCategoryId] = useState(DAYTIME_CATEGORY_ID);
+  const [error, setError] = useState(false);
+  const [attempt, setAttempt] = useState(0);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    setError(false);
+    fetch('/api/booking/config', { cache: 'no-store', signal: controller.signal }).then(async response => {
+      if (!response.ok) throw new Error('Services unavailable');
+      const data = await response.json() as Catalog;
+      setCatalog(data);
+    }).catch(() => { if (!controller.signal.aborted) setError(true); });
+    return () => controller.abort();
+  }, [attempt]);
+
+  const visibleServices = catalog?.services.filter(service => service.categoryId === categoryId) || [];
 
   return (
     <section id="services" className="scroll-mt-24 bg-barber-black py-24 text-barber-cream md:py-32">
@@ -40,26 +41,28 @@ export default function Services() {
           </div>
         </div>
 
-        <div className="mt-16 flex flex-wrap gap-2" aria-label="Filter services">
-          {categories.map((item) => (
-            <button key={item} type="button" aria-pressed={category === item} onClick={() => setCategory(item)} className={`min-h-11 px-5 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-barber-gold ${category === item ? "bg-barber-gold text-barber-black" : "border border-barber-grey/50 text-barber-cream hover:border-barber-gold hover:text-barber-gold"}`}>
-              {item}
+        {catalog && <div className="mt-16 flex flex-wrap gap-2" role="group" aria-label="Filter services">
+          {catalog.categories.map(category => (
+            <button key={category.id} type="button" aria-pressed={categoryId === category.id} onClick={() => setCategoryId(category.id)} className={`min-h-11 px-5 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-barber-gold ${categoryId === category.id ? "bg-barber-gold text-barber-black" : "border border-barber-grey/50 text-barber-cream hover:border-barber-gold hover:text-barber-gold"}`}>
+              {category.name}
             </button>
           ))}
-        </div>
+        </div>}
 
-        <div className="mt-7 border-t border-barber-cream/25" aria-live="polite">
-          {visibleServices.map((service) => (
-            <div key={service.name} className="grid grid-cols-[minmax(0,1fr)_auto] gap-x-5 gap-y-2 border-b border-barber-cream/20 py-6 sm:gap-x-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] md:items-baseline md:py-7">
+        <div className="mt-7 border-t border-barber-cream/25" aria-live="polite" aria-busy={!catalog && !error}>
+          {error ? <div className="py-8 text-barber-grey" role="alert">
+            <p>Services could not be loaded. Please try again.</p>
+            <button type="button" onClick={() => setAttempt(value => value + 1)} className="mt-3 min-h-11 text-barber-gold underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-barber-gold">Try again</button>
+          </div> : !catalog ? <p className="py-8 text-barber-grey" role="status">Loading services…</p> : !visibleServices.length ? <p className="py-8 text-barber-grey">No services are currently available in this category.</p> : visibleServices.map(service => (
+            <div key={service.id} className="grid grid-cols-[minmax(0,1fr)_auto] gap-x-5 gap-y-2 border-b border-barber-cream/20 py-6 sm:gap-x-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] md:items-baseline md:py-7">
               <h3 className="font-playfair text-xl leading-snug md:text-2xl">{service.name}</h3>
-              <p className="col-span-2 text-base leading-6 text-barber-grey md:col-span-1 md:row-start-1 md:col-start-2">{service.description}</p>
-              <p className="row-start-1 col-start-2 whitespace-nowrap font-playfair text-xl tabular-nums text-barber-gold md:col-start-3 md:text-2xl">{service.price}</p>
+              <div className="col-span-2 text-base leading-6 text-barber-grey md:col-span-1 md:row-start-1 md:col-start-2">
+                {service.description && <p className="whitespace-pre-line">{service.description}</p>}
+                {service.priceDescription && <p className="mt-2 whitespace-pre-line text-sm text-barber-gold">{service.priceDescription}</p>}
+              </div>
+              <p className="row-start-1 col-start-2 whitespace-nowrap font-playfair text-xl tabular-nums text-barber-gold md:col-start-3 md:text-2xl">{money(service)}</p>
             </div>
           ))}
-        </div>
-        <div className="mt-8 flex flex-col gap-2 text-base leading-7 text-barber-grey sm:flex-row sm:gap-8">
-          <p>Complimentary whisky, wine, coffee &amp; soft drinks.</p>
-          <p>Students enjoy 20% off.</p>
         </div>
       </div>
     </section>

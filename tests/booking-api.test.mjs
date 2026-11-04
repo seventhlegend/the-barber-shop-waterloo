@@ -109,7 +109,7 @@ test('Square price changes are reflected on refresh and rechecked at payment pre
 });
 
 test('Square location-specific service prices take precedence', async () => {
-  const { api } = fixture([slot], { variation: { location_overrides: [{ location_id: 'another-shop', price_money: { amount: 9999, currency: 'GBP' } }, { location_id: 'shop', price_money: { amount: 3900, currency: 'GBP' } }] } });
+  const { api } = fixture([slot], { variation: { price_description: 'Enjoy %10 OFF - £37', location_overrides: [{ location_id: 'another-shop', price_money: { amount: 9999, currency: 'GBP' } }, { location_id: 'shop', price_money: { amount: 3900, currency: 'GBP' } }] } });
   const result = await (await api(request('config'))).json();
   assert.equal(result.service.price, 3900);
 });
@@ -150,38 +150,50 @@ test('invalid JSON and oversized requests fail without calling Square', async ()
   assert.equal(calls.length, 0);
 });
 
-test('the same price shown on Square booking is used for listing, availability and review', async () => {
+test('Square numeric prices stay authoritative even when the unchanged description quotes a discount', async () => {
   let priceDescription = 'Haircuts %10 OFF - £37';
-  const { api } = fixture([slot], { variation: () => ({ price_description: priceDescription }) });
+  let amount = 4100;
+  const { api } = fixture([slot], { variation: () => ({ price_description: priceDescription, price_money: { amount, currency: 'GBP' } }) });
   const first = await (await api(request('config'))).json();
-  assert.equal(first.services[0].price, 3700);
+  assert.equal(first.services[0].price, 4100);
   assert.equal(first.services[0].basePrice, 4100);
-  assert.equal(first.services[0].priceSource, 'SQUARE_PRICE_DESCRIPTION');
+  assert.equal(first.services[0].priceDescription, priceDescription);
+  assert.equal(first.services[0].priceSource, 'SQUARE_PRICE_MONEY');
   priceDescription = 'Haircuts %10 OFF - £38.50';
-  assert.equal((await (await api(request('availability', selection))).json()).service.price, 3850);
+  const available = await (await api(request('availability', selection))).json();
+  assert.equal(available.service.price, 4100);
+  assert.equal(available.service.priceDescription, priceDescription);
+  amount = 4750;
   const review = await (await api(request('review', { ...selection, serviceId: SERVICE_ID, slotId: slot.start_at + '|' + TATAR_ID, price: 1 }))).json();
-  assert.equal(review.price, 3850);
-  assert.equal(review.service.price, 3850);
+  assert.equal(review.price, 4750);
+  assert.equal(review.service.price, 4750);
+  assert.equal(review.service.priceDescription, priceDescription);
 });
 
-test('ambiguous Square display prices never silently charge a different base price', async () => {
-  for (const price_description of ['From £37', '£37 or £41', '£37–40', 'Contact us', '50% deposit £20']) {
+test('Square descriptions are passed through as text without interpreting amounts, percentages or ranges', async () => {
+  for (const price_description of ['', 'Enjoy %10 OFF', 'From £37', '£37 or £41', '£37–40', 'Contact us', '50% deposit £20', '  Square text  ']) {
     const { api } = fixture([slot], { variation: { price_description } });
-    assert.equal((await api(request('config'))).status, 503, price_description);
+    const response = await api(request('config'));
+    assert.equal(response.status, 200, price_description);
+    const config = await response.json();
+    assert.equal(config.service.price, 4100, price_description);
+    assert.equal(config.service.priceDescription, price_description);
+    assert.equal(config.service.priceSource, 'SQUARE_PRICE_MONEY');
   }
 });
 
 test('catalog includes all daytime services and selected-service staff and duration drive the search', async () => {
   const secondId = 'scissor-service';
   const items = classic => [classic, {
-    id: 'scissor', type: 'ITEM', item_data: { name: 'Scissor Precision Cut', product_type: 'APPOINTMENTS_SERVICE', categories: [{ id: DAYTIME_CATEGORY_ID }], variations: [{ id: secondId, item_variation_data: { ...classic.item_data.variations[0].item_variation_data, item_id: 'scissor', team_member_ids: [BEYHAN_ID], service_duration: 2700000, price_description: 'Enjoy %10 OFF - £39' } }] },
+    id: 'scissor', type: 'ITEM', item_data: { name: 'Scissor Precision Cut', product_type: 'APPOINTMENTS_SERVICE', categories: [{ id: DAYTIME_CATEGORY_ID }], variations: [{ id: secondId, item_variation_data: { ...classic.item_data.variations[0].item_variation_data, item_id: 'scissor', team_member_ids: [BEYHAN_ID], service_duration: 2700000, price_money: { amount: 4400, currency: 'GBP' }, price_description: 'Enjoy %10 OFF - £39' } }] },
   }];
   const correct = { ...slot, appointment_segments: [{ service_variation_id: secondId, team_member_id: BEYHAN_ID, duration_minutes: 45 }] };
   const { api, calls } = fixture([slot, correct, { ...correct, appointment_segments: [{ ...correct.appointment_segments[0], duration_minutes: 40 }] }], { items });
   const config = await (await api(request('config'))).json();
   assert.equal(config.services.length, 2);
   const result = await (await api(request('availability', { ...selection, serviceId: secondId }))).json();
-  assert.equal(result.service.price, 3900);
+  assert.equal(result.service.price, 4400);
+  assert.equal(result.service.priceDescription, 'Enjoy %10 OFF - £39');
   assert.equal(result.slots.length, 1);
   assert.equal(result.slots[0].staffId, BEYHAN_ID);
   assert.equal(result.slots[0].durationMinutes, 45);
@@ -270,7 +282,7 @@ for (const vip of [false, true]) test(`full HTTP ${vip ? 'VIP' : 'daytime'} book
   const store = createCheckoutStore({ first: async (sql,args) => db.prepare(sql).get(...args), all: async (sql,args) => db.prepare(sql).all(...args), run: async (sql,args) => ({ changes: db.prepare(sql).run(...args).changes }) });
   let booking;
   const appointment = vip ? { ...slot, start_at: '2026-10-30T20:00:00Z', appointment_segments: [{ ...segment, service_variation_id: vipId, team_member_id: BEYHAN_ID }] } : slot;
-  const price = vip ? 8200 : 3700;
+  const price = vip ? 8200 : 4100;
   const { api, calls } = fixture([appointment], { checkout: true, store, env: { BOOKING_ENABLED: 'true', CHECKOUT_ENABLED: 'false' }, items: vip ? classic => [classic, vipItem(classic)] : undefined, variation: vip ? {} : { price_description: 'Haircuts %10 OFF - £37' }, square: async (path, init) => {
     assert.ok(!path.includes('/payments'));
     if (path === '/v2/bookings/business-booking-profile') return { business_booking_profile: { booking_enabled: true, support_seller_level_writes: true, booking_policy: 'ACCEPT_ALL' } };
@@ -289,7 +301,13 @@ for (const vip of [false, true]) test(`full HTTP ${vip ? 'VIP' : 'daytime'} book
   const heldResponse = await api(request('hold/create', { ...reference, ...selected }));
   assert.equal(heldResponse.status, 200);
   const held = await heldResponse.json();
-  const prepared = await api(request('reservation/prepare', { ...reference, ...selected, policyAccepted: true, policyVersion: held.policy.version, expectedAmount: price, appointmentNote: '漢'.repeat(1000), customer: { givenName: '漢'.repeat(100), familyName: '漢'.repeat(100), email: 'test@example.com', phone: '07700900000', birthday: '1990-05-20', consent: true } }));
+  assert.equal(held.service.price, price);
+  const details = { ...reference, ...selected, policyAccepted: true, policyVersion: held.policy.version, expectedAmount: price, appointmentNote: '漢'.repeat(1000), customer: { givenName: '漢'.repeat(100), familyName: '漢'.repeat(100), email: 'test@example.com', phone: '07700900000', birthday: '1990-05-20', consent: true } };
+  if (!vip) {
+    assert.equal((await api(request('reservation/prepare', { ...details, expectedAmount: 3700 }))).status, 409, 'A price copied from the discount description must never be accepted.');
+    assert.ok(!calls.some(call => new URL(call.url).pathname.startsWith('/v2/customers') || new URL(call.url).pathname === '/v2/bookings'), 'A rejected description-based quote must not create a customer or booking.');
+  }
+  const prepared = await api(request('reservation/prepare', details));
   assert.equal(prepared.status, 200);
   assert.equal((await prepared.json()).status, 'READY');
   const confirmed = await api(request('reservation/confirm', { ...reference, confirmed: true }));
@@ -298,6 +316,7 @@ for (const vip of [false, true]) test(`full HTTP ${vip ? 'VIP' : 'daytime'} book
   assert.equal(result.status, 'COMPLETE'); assert.equal(result.paymentStatus, 'PAY_AT_SHOP'); assert.equal(result.amount, price);
   assert.equal(booking.appointment_segments[0].service_variation_id, vip ? vipId : SERVICE_ID);
   assert.match(booking.seller_note, /NO ONLINE PAYMENT TAKEN/);
+  assert.ok(booking.seller_note.includes(`Quoted service price £${(price / 100).toFixed(2)}`));
   assert.equal(booking.customer_note, '漢'.repeat(1000));
   assert.equal((await (await api(request('reservation/status', reference))).json()).bookingId, 'test-booking');
   assert.ok(!calls.some(call => new URL(call.url).pathname.includes('/payments')));

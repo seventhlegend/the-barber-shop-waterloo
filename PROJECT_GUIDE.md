@@ -1,6 +1,6 @@
 # Waterloo Barber Shop — mantık, sıfırdan kurulum ve işletim
 
-Bu belge mevcut kodun tek bakım/kurulum rehberidir. Son düzenleme: 2 Kasım 2026. Eski ödeme taslakları, tasarım planları ve dağınık kurulum belgeleri bunun yerine kaldırılmıştır.
+Bu belge mevcut kodun tek bakım/kurulum rehberidir. Son düzenleme: 4 Kasım 2026. Eski ödeme taslakları, tasarım planları ve dağınık kurulum belgeleri bunun yerine kaldırılmıştır.
 
 ## 1. Sistemin parçaları
 
@@ -24,7 +24,7 @@ flowchart LR
 
 ### Ana sayfa ve booking arasındaki fark
 
-Ana sayfanın hizmet/üyelik fiyat metinleri ve gösterilen açılış saatleri React bileşenlerinde **editoryal, statik** içeriktir. Square senkronizasyonu `/book/daytime/` ve `/book/vip/` içindeki hizmet/fiyat/müsaitlik için geçerlidir. Ana sayfa metnini değiştirmek için ilgili bileşeni düzenleyip build al.
+Ana sayfanın Services bölümü, `/book/daytime/` ve `/book/vip/` ile aynı `/api/booking/config` kaynağından Square hizmet adını, açıklamasını, fiyat açıklamasını ve sayısal fiyatını okur. Elle yazılmış servis listesi/fiyat veya indirim yüzdesi yoktur; veri yüklenemezse eski/tahmini bir fiyat gösterilmez. Ana sayfadaki üyelik içeriği ve gösterilen açılış saatleri editoryal, statik içeriktir.
 
 Ana sayfadaki tüm “Book an appointment” bağlantıları aynı sekmede `/book/` seçim sayfasına gider. Square’ın barındırdığı rezervasyon sayfasına yönlendirme yoktur. Kategori adresleri `src/lib/booking-routes.ts` dosyasındadır. Ortak `BookingFlow` kategori prop’unu sayfadan alır; kategori form içinde değiştirilemez. Sayfa ve API aynı Square kategori/saat politikasını kullanır. Eski oturumdaki tutma/rezervasyon başka kategoriye aitse o kategorinin adresinde devam bağlantısı gösterilir; yanlış kategoride servis seçilmez ve tutma süresi uzatılmaz.
 
@@ -71,14 +71,14 @@ Config, Square Catalog'dan `ITEM,CATEGORY` kayıtlarını ve sayfalı bookable p
 
 ### Fiyat
 
-1. Varsa `location_overrides.price_money`, yoksa varyasyonun `price_money` alanı baz alınır.
-2. `price_description` doluysa içindeki **tek, açık GBP tutarı** Square booking sayfasındaki gibi teklif fiyatı olarak kullanılır.
-3. Örnek: Baz £41, açıklama `Haircuts %10 OFF - £37` → müşteri £37 görür. Site yüzde indirim hesaplamaz.
-4. Açıklama yoksa sayısal fiyat kullanılır. Birden fazla tutar, “from”, depozito veya fiyat aralığı güvenli biçimde engellenir.
+1. Varsa ilgili lokasyonun `location_overrides.price_money`, yoksa varyasyonun `price_money` alanı doğrudan kullanılır. Sabit GBP fiyat yoksa hizmet için fiyat uydurulmaz.
+2. `price_description` yalnızca Square’dan gelen metin olarak gösterilir. İçinden para tutarı veya indirim yüzdesi okunup sayısal fiyat değiştirilmez.
+3. Örnek: Square sayısal fiyatı £41, açıklaması `Haircuts %10 OFF - £37` ise sayısal fiyat **£41** olur; açıklama Square’da yazıldığı gibi aynen görünür. Bu tutarsızlık sitede hesapla veya metin düzenleyerek giderilmez; iki alan da Square’da yönetilir.
+4. Servis listelerine `%10 OFF`, öğrenci indirimi veya başka bir hizmet promosyonu eklenmez. Square’ın kendi metnindeki indirim ifadesi değiştirilmez ve otomatik uygulanmaz.
 5. VIP fiyatı **VIP hizmetinin kendi Square fiyatıdır**; Daytime fiyatı ikiyle çarpılmaz.
-6. Vergi bağlıysa salt hesaplama yapan `Orders CalculateOrder` kullanılır; order/payment oluşturulmaz. Hatalı hesapta tahmini tutar gösterilmez.
+6. Vergi bağlıysa Square’ın salt hesaplama yapan `Orders CalculateOrder` sonucu kullanılır; otomatik indirimler kapalıdır. Order/payment oluşturulmaz, hatalı hesapta tahmini tutar gösterilmez.
 
-**Square'da fiyatı değiştirirken fiyat açıklamasını da güncelle.** Açıklamada eski £37 bırakılırsa o tutar esas alınmaya devam eder. Fiyat/süre/varyasyon sürümü son onayda yeniden doğrulanır; değişiklik varsa müşteri yeniden incelemelidir.
+Fiyat, süre ve varyasyon sürümü son onayda tekrar doğrulanır; değişiklik varsa müşteri yeniden incelemelidir. Önceki tutma/teklif farklı bir tutarla kaydedilmişse sessizce indirimli fiyattan devam edilmez.
 
 İptal penceresi, metin, no-show ücreti ve iptal izni Square business booking profilinden okunur. Politika hash ile sürümlenir; onayda güncel sürümün kabulü gerekir. Eksik özel politika metni uydurulmaz; no-show ücreti burada tahsil edilmez.
 
@@ -319,7 +319,7 @@ Release ZIP'i geçici dizine açıp tekrar denetler. `.env`, token, DB, source m
 | 403 | Host origin listesinde mi, POST Origin aynı mı, HTTPS var mı? |
 | 429 | Bir dakika bekle; hızlı tekrar sorgulamayı bırak. |
 | VIP saati yok | Doğru kategori, Tatar/Beyhan ataması, gerçek Square gece müsaitliği, 90 dakika ve gece yarısı sınırı. |
-| Yeni fiyat/saat yok | Yenile; açıklamada eski fiyat kalmış olabilir. Ana sayfa fiyat metni ayrıca statiktir. |
+| Yeni fiyat/saat yok | Yenile; doğru Square lokasyonundaki sayısal fiyatı/saatleri kontrol et. Fiyat açıklaması tutarı değiştirmez; açıklama metni ayrı bir Square alanıdır. |
 | Yerelde `/api` yok | Yalnız `pnpm dev` yerine `pnpm book`. |
 | Eski tutma | Yenilemek uzatmaz. Yeni saat seç veya süre sonunu bekle. Gönderilmiş işlemde aynı referansla status kontrolü yap. |
 | Key değişiminden sonra status çözülemiyor | Eski Secret'ı geri koy; DB'yi silme, yeni key ile açmaya çalışma. |
