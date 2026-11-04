@@ -28,6 +28,8 @@ Ana sayfanın Services bölümü, `/book/daytime/` ve `/book/vip/` ile aynı `/a
 
 Ana sayfadaki tüm “Book an appointment” bağlantıları aynı sekmede `/book/` seçim sayfasına gider. Square’ın barındırdığı rezervasyon sayfasına yönlendirme yoktur. Kategori adresleri `src/lib/booking-routes.ts` dosyasındadır. Ortak `BookingFlow` kategori prop’unu sayfadan alır; kategori form içinde değiştirilemez. Sayfa ve API aynı Square kategori/saat politikasını kullanır. Eski oturumdaki tutma/rezervasyon başka kategoriye aitse o kategorinin adresinde devam bağlantısı gösterilir; yanlış kategoride servis seçilmez ve tutma süresi uzatılmaz.
 
+Mobil ana sayfada başlık ve ana rezervasyon butonu, açıklama ve fotoğraftan önce gelir; küçük ekranın ilk görünümünde randevu bağlantısı bulunmalıdır. Header zemini her kaydırma konumunda opak siyahtır; görselin veya açık zeminlerin rengini geçirmez. Bu sırayı değiştirirken 320×480 ve yatay 568×320 gibi dar/kısa görünüm alanlarında butonun tamamının görünürlüğünü kontrol et.
+
 Üyelik butonları e-posta uygulamasını açar; üyelik tahsilatı veya otomatik indirim uygulamaz. Galeri görselleri tam boy yeni sekmede açılır. Harita OpenStreetMap iframe'i, yol tarifi Google Maps bağlantısıdır. Mobil menü ve yukarı çık düğmesi client bileşenleridir. Yerleşik mesaj/e-posta gönderme veya analytics servisi yoktur.
 
 ### Logo ve ikonlar

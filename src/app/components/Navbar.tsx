@@ -15,14 +15,6 @@ const links = [
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 30);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   useEffect(() => {
     if (!open) return;
@@ -34,7 +26,7 @@ export default function Navbar() {
   }, [open]);
 
   return (
-    <header className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${scrolled || open ? "bg-barber-black/95 shadow-lg backdrop-blur-md" : "bg-barber-black/30"}`}>
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-barber-cream/10 bg-barber-black">
       <nav aria-label="Main navigation" className="mx-auto flex h-20 max-w-[1600px] items-center justify-between gap-6 px-5 md:px-10 lg:px-12">
         <a href="#top" onClick={() => setOpen(false)} className="shrink-0 text-barber-cream" aria-label="The Barber Shop, home">
           <BrandLogo />
